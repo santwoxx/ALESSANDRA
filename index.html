@@ -154,6 +154,42 @@
       </div>
     </div>
 
+    <!-- Barra de Busca Rápida & Filtros em Destaque no Topo -->
+    <section class="filter-search-section" aria-label="Filtros e Busca de Pratos">
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="menuSearchInput" class="menu-search-input" placeholder="Buscar por prato, caldo, bolo, suco, acompanhamento..." aria-label="Buscar no cardápio" />
+        <button type="button" id="btnClearSearch" class="btn-clear-search" title="Limpar busca" style="display: none;">✕</button>
+      </div>
+
+      <div class="quick-tags-container" id="quickFilterTags">
+        <button type="button" class="filter-pill-btn active" data-filter="all">
+          <span>🍽️</span> Todos
+        </button>
+        <button type="button" class="filter-pill-btn" data-filter="popular">
+          <span>⭐</span> Mais Pedidos
+        </button>
+        <button type="button" class="filter-pill-btn" data-filter="vegetariano">
+          <span>🌱</span> Vegetariano
+        </button>
+        <button type="button" class="filter-pill-btn" data-filter="refeicoes">
+          <span>🍲</span> Refeições Completas
+        </button>
+        <button type="button" class="filter-pill-btn" data-filter="sucos">
+          <span>🥤</span> Sucos & Bebidas
+        </button>
+        <button type="button" class="filter-pill-btn" data-filter="sobremesas">
+          <span>🍰</span> Sobremesas & Bolos
+        </button>
+      </div>
+
+      <!-- Aviso Dinâmico de Filtro Ativo -->
+      <div id="filterResultNotice" class="filter-result-notice" style="display: none;">
+        <span id="filterResultText">Exibindo itens</span>
+        <button type="button" id="btnResetFilter" class="btn-reset-filter">✕ Limpar Filtro</button>
+      </div>
+    </section>
+
     <!-- Container onde os pratos serão inseridos dinamicamente -->
     <div id="menuSectionsContainer"></div>
 

@@ -1,10 +1,10 @@
 /**
  * CARDÁPIO DIGITAL - CHEF ALESSANDRA (EQUIPE DA COZINHA EJC)
- * Lógica Completa da Aplicação: Catálogo, Modais, Carrinho, Pix e WhatsApp
+ * Lógica Completa da Aplicação: Catálogo, Filtros Rápidos, Busca, Modais, Carrinho, Pix e WhatsApp
  */
 
 // =============================================================================
-// 1. CATÁLOGO COMPLETO DE PRATOS E REFEIÇÕES
+// 1. CATÁLOGO COMPLETO DE PRATOS E REFEIÇÕES COM TAGS E FILTROS
 // =============================================================================
 const MENU_DATA = [
   // --- ALMOÇO COMPLETO ---
@@ -14,6 +14,9 @@ const MENU_DATA = [
     name: 'Bife à Parmegiana Especial',
     price: 25.00,
     tag: 'Mais Pedido',
+    isPopular: true,
+    isVegetarian: false,
+    isMeal: true,
     image: 'assets/dishes/bife-parmegiana.jpg',
     description: 'Bife empanado crocante, coberto com molho de tomate artesanal especial da Chef e queijo mussarela gratinado irresistível.',
     sidesSummary: 'Arroz soltinho, feijão temperado, macarrão ao molho, salada cozida e salada crua.',
@@ -32,6 +35,9 @@ const MENU_DATA = [
     name: 'Frango Assado Douradinho da Casa',
     price: 25.00,
     tag: 'Sabor Caseiro',
+    isPopular: true,
+    isVegetarian: false,
+    isMeal: true,
     image: 'assets/dishes/frango-assado.jpg',
     description: 'Frango assado douradinho e suculento, marinado em temperos naturais e assado na perfeição com muito carinho.',
     sidesSummary: 'Arroz, feijão, batata grelhada com bechamel e mussarela, farofa de banana e salada crua.',
@@ -50,6 +56,9 @@ const MENU_DATA = [
     name: 'Fricassê Cremoso de Frango',
     price: 25.00,
     tag: 'Cremoso & Especial',
+    isPopular: true,
+    isVegetarian: false,
+    isMeal: true,
     image: 'assets/dishes/fricasse-frango.jpg',
     description: 'Fricassê aveludado de frango desfiado com milho verde fresco, ervilha, cenoura e temperos especiais, coberto com batata palha dourada.',
     sidesSummary: 'Arroz branco, feijão caseiro, salada crua e salada cozida.',
@@ -68,6 +77,9 @@ const MENU_DATA = [
     name: 'Fricassê Especial Vegetariano',
     price: 25.00,
     tag: 'Opção Vegetariana',
+    isPopular: false,
+    isVegetarian: true,
+    isMeal: true,
     image: 'assets/dishes/fricasse-vegetariano.jpg',
     description: 'Fricassê cremoso e leve à base de proteína vegetal nobre, milho verde, ervilha, cenoura ralada e ervas aromáticas.',
     sidesSummary: 'Arroz branco soltinho, feijão caseiro, salada crua e salada cozida.',
@@ -87,6 +99,9 @@ const MENU_DATA = [
     name: 'Cuscuz Nordestino Temperado Especial',
     price: 20.00,
     tag: 'Energia & Tradição',
+    isPopular: true,
+    isVegetarian: true,
+    isMeal: true,
     image: 'assets/dishes/cuscuz-temperado.jpg',
     description: 'Cuscuz de milho flocão fofinho e úmido, temperado no capricho com ovos cozidos fatiados, ervilhas, tomate e cheiro verde.',
     sidesSummary: 'Combo Completo com Suco natural + Melancia ou fatia de bolo caseiro.',
@@ -109,6 +124,9 @@ const MENU_DATA = [
     name: 'Batata Doce Cozida Nutritiva',
     price: 20.00,
     tag: 'Saudável & Natural',
+    isPopular: false,
+    isVegetarian: true,
+    isMeal: true,
     image: 'assets/dishes/batata-doce.jpg',
     description: 'Batata doce macia e quentinha, fonte pura de energia saudável, acompanhada de pãozinho fresco, mingau ou fruta e suco.',
     sidesSummary: 'Acompanha Suco natural gelado + Pão fresco ou fatia de bolo.',
@@ -126,6 +144,9 @@ const MENU_DATA = [
     name: 'Pão Francês com Ovos Mexidos',
     price: 20.00,
     tag: 'Clássico Aconchegante',
+    isPopular: false,
+    isVegetarian: true,
+    isMeal: true,
     image: 'assets/dishes/pao-ovo.jpg',
     description: 'Pão francês com casquinha crocante, recheado com ovos mexidos super cremosos preparados com cheiro verde e manteiga.',
     sidesSummary: 'Acompanha 1 Suco natural + 1 Fatia de Melancia doce.',
@@ -143,6 +164,9 @@ const MENU_DATA = [
     name: 'Mini Sanduíches Naturais da Manhã',
     price: 20.00,
     tag: 'Leve & Refrescante',
+    isPopular: false,
+    isVegetarian: false,
+    isMeal: true,
     image: 'assets/dishes/sanduiche-natural.jpg',
     description: 'Sanduíches naturais em pão integral especial com grãos, patê suave de frango, alface americana e rodelas de tomate.',
     sidesSummary: 'Acompanha suco natural à sua escolha + fruta.',
@@ -160,6 +184,9 @@ const MENU_DATA = [
     name: 'Mingau Cremoso de Milho Verde',
     price: 20.00,
     tag: 'Quentinho & Aveludado',
+    isPopular: false,
+    isVegetarian: true,
+    isMeal: true,
     image: 'assets/dishes/mingau-milho.jpg',
     description: 'Mingau quentinho, espesso e aveludado, feito com milho fresco selecionado, leite integral e salpicado com canela em pó.',
     sidesSummary: 'Acompanha fatia de bolo caseiro + suco natural.',
@@ -179,6 +206,9 @@ const MENU_DATA = [
     name: 'Caldo de Mandioca com Frango',
     price: 20.00,
     tag: 'Aquecer a Noite',
+    isPopular: true,
+    isVegetarian: false,
+    isMeal: true,
     image: 'assets/dishes/caldo-mandioca.jpg',
     description: 'Caldo cremoso, quentinho e reconfortante de mandioca cozida com bastante frango desfiado bem temperado e cebolinha.',
     sidesSummary: 'Acompanha Pão com patê artesanal + Suco natural gelado.',
@@ -195,6 +225,9 @@ const MENU_DATA = [
     name: 'Caldo Nutritivo de Abóbora com Frango',
     price: 20.00,
     tag: 'Sabor & Leveza',
+    isPopular: false,
+    isVegetarian: false,
+    isMeal: true,
     image: 'assets/dishes/caldo-abobora.jpg',
     description: 'Caldo especial de abóbora cabotiá cozida lentamente com frango desfiado, toques de azeite e ervas finas. Leve e nutritivo!',
     sidesSummary: 'Acompanha pão com patê da casa + Suco natural.',
@@ -210,6 +243,9 @@ const MENU_DATA = [
     name: 'Hambúrguer Artesanal Completo + Suco',
     price: 23.00,
     tag: 'Gourmet Noturno',
+    isPopular: true,
+    isVegetarian: false,
+    isMeal: true,
     image: 'assets/dishes/hamburguer.jpg',
     description: 'Pão de gergelim dourado, hambúrguer caseiro suculento e alto, queijo derretido, tomate fatiado, alface e molho da casa.',
     sidesSummary: 'Acompanha Suco natural gelado + Fatia de bolo à escolha.',
@@ -226,6 +262,9 @@ const MENU_DATA = [
     name: 'Combo Noite: Pão com Patê & Suco',
     price: 20.00,
     tag: 'Prático & Gostoso',
+    isPopular: false,
+    isVegetarian: false,
+    isMeal: true,
     image: 'assets/dishes/pao-pate.jpg',
     description: 'Pãezinhos franceses fresquinhos servidos com pote generoso de patê caseiro especial de frango e ervas da Chef Alessandra.',
     sidesSummary: 'Acompanha Suco natural + Fatia de bolo caseiro.',
@@ -245,6 +284,9 @@ const MENU_DATA = [
     name: 'Bolo de Chocolate Cremoso',
     price: 8.00,
     tag: 'Irresistível',
+    isPopular: true,
+    isVegetarian: true,
+    isMeal: false,
     image: 'assets/dishes/bolo-chocolate.jpg',
     description: 'Bolo fofinho de chocolate com cobertura abundante de brigadeiro cremoso e confeitos crocantes de chocolate.',
     sidesSummary: 'Fatia generosa embalada com carinho.'
@@ -255,6 +297,9 @@ const MENU_DATA = [
     name: 'Bolo de Milho Tradicional da Fazenda',
     price: 7.00,
     tag: 'Sabor de Infância',
+    isPopular: true,
+    isVegetarian: true,
+    isMeal: false,
     image: 'assets/dishes/bolo-milho.jpg',
     description: 'Bolo caseiro de milho com textura fofa e úmida, feito com milho de verdade e aquele sabor acolhedor de café da tarde.',
     sidesSummary: 'Fatia generosa e quentinha.'
@@ -265,6 +310,9 @@ const MENU_DATA = [
     name: 'Bolo de Banana com Canela',
     price: 7.00,
     tag: 'Aroma Delicioso',
+    isPopular: false,
+    isVegetarian: true,
+    isMeal: false,
     image: 'assets/dishes/bolo-banana.jpg',
     description: 'Massa macia com pedaços de banana caramelizada e toque perfumado de canela em pó. O sabor que abraça!',
     sidesSummary: 'Fatia farta.'
@@ -275,6 +323,9 @@ const MENU_DATA = [
     name: 'Bolo de Abacaxi Caramelizado',
     price: 8.00,
     tag: 'Doce na Medida',
+    isPopular: false,
+    isVegetarian: true,
+    isMeal: false,
     image: 'assets/dishes/bolo-abacaxi.jpg',
     description: 'Bolo invertido úmido e fofinho com rodelas de abacaxi glaceadas na calda caramelizada dourada.',
     sidesSummary: 'Fatia farta.'
@@ -285,6 +336,9 @@ const MENU_DATA = [
     name: 'Bolo Gelado de Coco Cremoso',
     price: 8.00,
     tag: 'Fofinho & Úmido',
+    isPopular: false,
+    isVegetarian: true,
+    isMeal: false,
     image: 'assets/dishes/bolo-coco.jpg',
     description: 'Massa leve embebida em calda cremosa de coco e coberta com flocos de coco fresco ralado.',
     sidesSummary: 'Embalado individualmente.'
@@ -295,6 +349,9 @@ const MENU_DATA = [
     name: 'Porção de Melancia Doce em Fatias',
     price: 6.00,
     tag: '100% Natural',
+    isPopular: false,
+    isVegetarian: true,
+    isMeal: false,
     image: 'assets/dishes/melancia.jpg',
     description: 'Fatias frescas, doces e super suculentas de melancia bem gelada para refrescar e hidratar o dia.',
     sidesSummary: 'Porção com 3 fatias caprichadas.'
@@ -307,6 +364,9 @@ const MENU_DATA = [
     name: 'Suco Especial de Goiaba com Cacau',
     price: 8.00,
     tag: 'Especial Sul da Bahia',
+    isPopular: true,
+    isVegetarian: true,
+    isMeal: false,
     image: 'assets/dishes/suco-goiaba-cacau.jpg',
     description: 'Receita autêntica combinando polpa de goiaba fresca e o nobre cacau da nossa terra. Uma explosão de energia e sabor único!',
     sidesSummary: 'Copo 400ml gelado.'
@@ -317,6 +377,9 @@ const MENU_DATA = [
     name: 'Suco Natural de Cajá',
     price: 7.00,
     tag: 'Refrescante & Cítrico',
+    isPopular: true,
+    isVegetarian: true,
+    isMeal: false,
     image: 'assets/dishes/sucos-trio.jpg',
     description: 'Suco feito com a pura polpa da fruta fresca, cítrico na medida certa e muito refrescante.',
     sidesSummary: 'Copo 400ml bem gelado.'
@@ -327,6 +390,9 @@ const MENU_DATA = [
     name: 'Suco Natural de Acerola',
     price: 7.00,
     tag: 'Vitamina C Pura',
+    isPopular: false,
+    isVegetarian: true,
+    isMeal: false,
     image: 'assets/dishes/sucos-trio.jpg',
     description: 'Suco rico em vitamina C natural, com sabor vivo da fruta batida na hora.',
     sidesSummary: 'Copo 400ml gelado.'
@@ -337,6 +403,9 @@ const MENU_DATA = [
     name: 'Suco Natural de Goiaba',
     price: 7.00,
     tag: 'Aveludado & Doce',
+    isPopular: false,
+    isVegetarian: true,
+    isMeal: false,
     image: 'assets/dishes/sucos-trio.jpg',
     description: 'Polpa cremosa e aveludada de goiaba vermelha fresca. Saudável e suave.',
     sidesSummary: 'Copo 400ml gelado.'
@@ -347,6 +416,9 @@ const MENU_DATA = [
     name: 'Suco Natural de Cupuaçu Cremoso',
     price: 8.00,
     tag: 'Sabor Marcante',
+    isPopular: false,
+    isVegetarian: true,
+    isMeal: false,
     image: 'assets/dishes/suco-misto.jpg',
     description: 'Suco cremoso de cupuaçu com aroma inconfundível e sabor tropical único.',
     sidesSummary: 'Copo 400ml gelado.'
@@ -367,12 +439,16 @@ const FLYERS_DATA = [
 ];
 
 // =============================================================================
-// 2. ESTADO DO CARRINHO E SELEÇÃO ATUAL
+// 2. ESTADO DO CARRINHO, FILTROS E SELEÇÃO ATUAL
 // =============================================================================
 let cart = [];
 let currentDishCustomizing = null;
 let currentCustomQty = 1;
 let qrCodeInstance = null;
+
+// Estados de Filtros Rápidos
+let currentQuickFilter = 'all';
+let currentSearchQuery = '';
 
 // =============================================================================
 // 3. INICIALIZAÇÃO DA INTERFACE
@@ -380,15 +456,112 @@ let qrCodeInstance = null;
 document.addEventListener('DOMContentLoaded', () => {
   renderDishesGrid();
   renderFlyersModalGrid();
+  setupQuickFiltersAndSearch();
   setupCategoryNav();
   setupCartBar();
   setupAudioPlayer();
   setupReceiptUpload();
   updateCartUI();
+  updateFilterPillCounts();
 });
 
-// Renderizar todos os pratos divididos por categorias
+// Atualizar contadores visuais nas tags de filtro
+function updateFilterPillCounts() {
+  const counts = {
+    all: MENU_DATA.length,
+    popular: MENU_DATA.filter(d => d.isPopular).length,
+    vegetariano: MENU_DATA.filter(d => d.isVegetarian).length,
+    refeicoes: MENU_DATA.filter(d => d.isMeal).length,
+    sucos: MENU_DATA.filter(d => d.category === 'sucos').length,
+    sobremesas: MENU_DATA.filter(d => d.category === 'bolos').length
+  };
+
+  const pillButtons = document.querySelectorAll('.filter-pill-btn');
+  pillButtons.forEach(btn => {
+    const filterType = btn.getAttribute('data-filter');
+    if (counts[filterType] !== undefined) {
+      let countBadge = btn.querySelector('.pill-count');
+      if (!countBadge) {
+        countBadge = document.createElement('span');
+        countBadge.className = 'pill-count';
+        btn.appendChild(countBadge);
+      }
+      countBadge.textContent = counts[filterType];
+    }
+  });
+}
+
+// Configurar Tags de Filtro Rápido e Barra de Pesquisa
+function setupQuickFiltersAndSearch() {
+  const pillButtons = document.querySelectorAll('.filter-pill-btn');
+  const searchInput = document.getElementById('menuSearchInput');
+  const btnClearSearch = document.getElementById('btnClearSearch');
+  const btnResetFilter = document.getElementById('btnResetFilter');
+
+  // Clique nos botões de filtro
+  pillButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      pillButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentQuickFilter = btn.getAttribute('data-filter');
+      renderDishesGrid();
+    });
+  });
+
+  // Digitação no campo de busca
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      currentSearchQuery = e.target.value.trim().toLowerCase();
+      if (btnClearSearch) {
+        btnClearSearch.style.display = currentSearchQuery.length > 0 ? 'flex' : 'none';
+      }
+      renderDishesGrid();
+    });
+  }
+
+  // Limpar busca
+  if (btnClearSearch) {
+    btnClearSearch.addEventListener('click', () => {
+      if (searchInput) {
+        searchInput.value = '';
+        searchInput.focus();
+      }
+      currentSearchQuery = '';
+      btnClearSearch.style.display = 'none';
+      renderDishesGrid();
+    });
+  }
+
+  // Limpar filtros e resetar para Todos
+  if (btnResetFilter) {
+    btnResetFilter.addEventListener('click', () => {
+      currentQuickFilter = 'all';
+      currentSearchQuery = '';
+      if (searchInput) {
+        searchInput.value = '';
+      }
+      if (btnClearSearch) {
+        btnClearSearch.style.display = 'none';
+      }
+      pillButtons.forEach(b => {
+        if (b.getAttribute('data-filter') === 'all') {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
+      renderDishesGrid();
+    });
+  }
+}
+
+// Renderizar pratos com suporte a filtros e busca
 function renderDishesGrid() {
+  const container = document.getElementById('menuSectionsContainer');
+  const filterNotice = document.getElementById('filterResultNotice');
+  const filterText = document.getElementById('filterResultText');
+  if (!container) return;
+
   const categories = [
     { id: 'almoco', title: '🍲 Almoço Completo', priceBadge: 'R$ 25,00 cada' },
     { id: 'cafe-manha', title: '☀️ Café da Manhã', priceBadge: 'R$ 20,00 cada' },
@@ -397,18 +570,74 @@ function renderDishesGrid() {
     { id: 'sucos', title: '🥤 Sucos Naturais & Especiais', priceBadge: 'A partir de R$ 7,00' }
   ];
 
-  const container = document.getElementById('menuSectionsContainer');
-  if (!container) return;
+  // Filtrar itens
+  let filteredData = MENU_DATA.filter(dish => {
+    // 1. Filtro de tag
+    let passTag = true;
+    if (currentQuickFilter === 'popular') passTag = dish.isPopular === true;
+    else if (currentQuickFilter === 'vegetariano') passTag = dish.isVegetarian === true;
+    else if (currentQuickFilter === 'refeicoes') passTag = dish.isMeal === true;
+    else if (currentQuickFilter === 'sucos') passTag = dish.category === 'sucos';
+    else if (currentQuickFilter === 'sobremesas') passTag = dish.category === 'bolos';
 
+    if (!passTag) return false;
+
+    // 2. Filtro de busca textual
+    if (currentSearchQuery) {
+      const matchName = dish.name.toLowerCase().includes(currentSearchQuery);
+      const matchDesc = dish.description.toLowerCase().includes(currentSearchQuery);
+      const matchSides = dish.sidesSummary ? dish.sidesSummary.toLowerCase().includes(currentSearchQuery) : false;
+      const matchTag = dish.tag ? dish.tag.toLowerCase().includes(currentSearchQuery) : false;
+      return matchName || matchDesc || matchSides || matchTag;
+    }
+
+    return true;
+  });
+
+  // Atualizar aviso de filtro
+  const isFiltering = currentQuickFilter !== 'all' || currentSearchQuery.length > 0;
+  if (filterNotice && filterText) {
+    if (isFiltering) {
+      filterNotice.style.display = 'flex';
+      let label = '';
+      if (currentQuickFilter === 'popular') label = '⭐ Mais Pedidos';
+      else if (currentQuickFilter === 'vegetariano') label = '🌱 Vegetarianos';
+      else if (currentQuickFilter === 'refeicoes') label = '🍲 Refeições Completas';
+      else if (currentQuickFilter === 'sucos') label = '🥤 Sucos & Bebidas';
+      else if (currentQuickFilter === 'sobremesas') label = '🍰 Sobremesas & Bolos';
+
+      const searchPart = currentSearchQuery ? ` contendo "${currentSearchQuery}"` : '';
+      filterText.textContent = `Exibindo ${filteredData.length} item(ns) ${label ? 'em ' + label : ''}${searchPart}`;
+    } else {
+      filterNotice.style.display = 'none';
+    }
+  }
+
+  // Se nenhum resultado for encontrado
+  if (filteredData.length === 0) {
+    container.innerHTML = `
+      <div class="filter-no-results">
+        <div class="filter-no-results-icon">🔍</div>
+        <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 8px;">Nenhum item encontrado</h3>
+        <p style="font-size: 0.95rem; margin-bottom: 18px;">Não encontramos nenhum prato com os filtros selecionados.</p>
+        <button type="button" class="btn-reset-filter" onclick="document.getElementById('btnResetFilter').click()" style="padding: 10px 24px; font-size: 0.9rem;">
+          Ver Cardápio Completo
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  // Se estiver filtrando, agrupar somente categorias que têm itens correspondentes
   container.innerHTML = categories.map(cat => {
-    const dishesInCat = MENU_DATA.filter(item => item.category === cat.id);
+    const dishesInCat = filteredData.filter(item => item.category === cat.id);
     if (dishesInCat.length === 0) return '';
 
     return `
       <section id="${cat.id}" class="category-section">
         <div class="category-header-wrap">
           <h2 class="category-title">${cat.title}</h2>
-          <span class="category-badge-price">${cat.priceBadge}</span>
+          <span class="category-badge-price">${dishesInCat.length} ${dishesInCat.length === 1 ? 'opção' : 'opções'}</span>
         </div>
         <div class="dishes-grid">
           ${dishesInCat.map(dish => renderDishCardHTML(dish)).join('')}
@@ -420,6 +649,9 @@ function renderDishesGrid() {
 
 function renderDishCardHTML(dish) {
   const formattedPrice = dish.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const vegBadge = dish.isVegetarian ? '<span style="color: #22c55e; margin-left: 6px;" title="Opção Vegetariana">🌱</span>' : '';
+  const starBadge = dish.isPopular ? '<span style="color: #f59e0b; margin-left: 4px;" title="Destaque / Mais Pedido">⭐</span>' : '';
+
   return `
     <article class="dish-card" data-id="${dish.id}">
       <div class="dish-card-media" onclick="openDishCustomizer('${dish.id}')" style="cursor: pointer;">
@@ -427,7 +659,9 @@ function renderDishCardHTML(dish) {
         <span class="dish-badge-tag">${dish.tag}</span>
       </div>
       <div class="dish-card-body">
-        <h3 class="dish-name" onclick="openDishCustomizer('${dish.id}')" style="cursor: pointer;">${dish.name}</h3>
+        <h3 class="dish-name" onclick="openDishCustomizer('${dish.id}')" style="cursor: pointer;">
+          ${dish.name} ${vegBadge} ${starBadge}
+        </h3>
         <p class="dish-desc">${dish.description}</p>
         ${dish.sidesSummary ? `<div class="dish-sides-preview"><strong>Acompanha:</strong> ${dish.sidesSummary}</div>` : ''}
         <div class="dish-card-footer">
@@ -460,6 +694,21 @@ function setupCategoryNav() {
         openFlyersModal();
         return;
       }
+      
+      // Ao clicar em uma aba de categoria, se estiver com filtro de busca restrito, resetar para exibir a categoria
+      if (currentQuickFilter !== 'all' || currentSearchQuery) {
+        currentQuickFilter = 'all';
+        currentSearchQuery = '';
+        const searchInput = document.getElementById('menuSearchInput');
+        if (searchInput) searchInput.value = '';
+        const btnClear = document.getElementById('btnClearSearch');
+        if (btnClear) btnClear.style.display = 'none';
+        document.querySelectorAll('.filter-pill-btn').forEach(b => {
+          b.classList.toggle('active', b.getAttribute('data-filter') === 'all');
+        });
+        renderDishesGrid();
+      }
+
       const targetSection = document.getElementById(targetId);
       if (targetSection) {
         targetSection.scrollIntoView({ behavior: 'smooth' });
@@ -840,7 +1089,7 @@ function finalizeAndSendWhatsApp() {
   message += `🔑 *Chave Pix Utilizada:* 73988411342 (Alessandra)\n\n`;
 
   message += `🧾 *COMPROVANTE DO PIX:*\n`;
-  message += `_(Segue anexo o comprovante do pagamento Pix para confirmação da reserva!)_\n\n`;
+  message += `_(Segue anexo o comprovante do pagamento Pix para confirmação da reserva! Pronto para preparar!)_\n\n`;
   message += `Deus abençoe! 🙏❤️`;
 
   // Copiar resumo do pedido para área de transferência por conveniência
