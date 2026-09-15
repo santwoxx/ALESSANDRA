@@ -1,5 +1,5 @@
 /**
- * CARDÁPIO DIGITAL - CHEF ALESSANDRA (EQUIPE DA COZINHA EJC)
+ * CARDÁPIO DIGITAL - CHEF ALESSANDRA (EQUIPE DA COZINHA CAMPAL)
  * Lógica Completa da Aplicação: Catálogo, Filtros Rápidos, Busca, Modais, Carrinho, Pix e WhatsApp
  */
 
@@ -12,7 +12,7 @@ const MENU_DATA = [
     id: 'alm-parmegiana',
     category: 'almoco',
     name: 'Bife à Parmegiana Especial',
-    price: 25.00,
+    price: 33.00,
     tag: 'Mais Pedido',
     isPopular: true,
     isVegetarian: false,
@@ -33,7 +33,7 @@ const MENU_DATA = [
     id: 'alm-frango-douradinho',
     category: 'almoco',
     name: 'Frango Assado Douradinho da Casa',
-    price: 25.00,
+    price: 33.00,
     tag: 'Sabor Caseiro',
     isPopular: true,
     isVegetarian: false,
@@ -54,7 +54,7 @@ const MENU_DATA = [
     id: 'alm-fricasse-frango',
     category: 'almoco',
     name: 'Fricassê Cremoso de Frango',
-    price: 25.00,
+    price: 33.00,
     tag: 'Cremoso & Especial',
     isPopular: true,
     isVegetarian: false,
@@ -75,7 +75,7 @@ const MENU_DATA = [
     id: 'alm-fricasse-vegetariano',
     category: 'almoco',
     name: 'Fricassê Especial Vegetariano',
-    price: 25.00,
+    price: 33.00,
     tag: 'Opção Vegetariana',
     isPopular: false,
     isVegetarian: true,
@@ -97,7 +97,7 @@ const MENU_DATA = [
     id: 'man-cuscuz',
     category: 'cafe-manha',
     name: 'Cuscuz Nordestino Temperado Especial',
-    price: 20.00,
+    price: 25.00,
     tag: 'Energia & Tradição',
     isPopular: true,
     isVegetarian: true,
@@ -122,7 +122,7 @@ const MENU_DATA = [
     id: 'man-batata-doce',
     category: 'cafe-manha',
     name: 'Batata Doce Cozida Nutritiva',
-    price: 20.00,
+    price: 25.00,
     tag: 'Saudável & Natural',
     isPopular: false,
     isVegetarian: true,
@@ -142,7 +142,7 @@ const MENU_DATA = [
     id: 'man-pao-ovo',
     category: 'cafe-manha',
     name: 'Pão Francês com Ovos Mexidos',
-    price: 20.00,
+    price: 25.00,
     tag: 'Clássico Aconchegante',
     isPopular: false,
     isVegetarian: true,
@@ -162,7 +162,7 @@ const MENU_DATA = [
     id: 'man-sanduiche-natural',
     category: 'cafe-manha',
     name: 'Mini Sanduíches Naturais da Manhã',
-    price: 20.00,
+    price: 25.00,
     tag: 'Leve & Refrescante',
     isPopular: false,
     isVegetarian: false,
@@ -182,7 +182,7 @@ const MENU_DATA = [
     id: 'man-mingau',
     category: 'cafe-manha',
     name: 'Mingau Cremoso de Milho Verde',
-    price: 20.00,
+    price: 25.00,
     tag: 'Quentinho & Aveludado',
     isPopular: false,
     isVegetarian: true,
@@ -204,7 +204,7 @@ const MENU_DATA = [
     id: 'noi-caldo-mandioca',
     category: 'cafe-noite',
     name: 'Caldo de Mandioca com Frango',
-    price: 20.00,
+    price: 25.00,
     tag: 'Aquecer a Noite',
     isPopular: true,
     isVegetarian: false,
@@ -223,7 +223,7 @@ const MENU_DATA = [
     id: 'noi-caldo-abobora',
     category: 'cafe-noite',
     name: 'Caldo Nutritivo de Abóbora com Frango',
-    price: 20.00,
+    price: 25.00,
     tag: 'Sabor & Leveza',
     isPopular: false,
     isVegetarian: false,
@@ -241,7 +241,7 @@ const MENU_DATA = [
     id: 'noi-hamburguer',
     category: 'cafe-noite',
     name: 'Hambúrguer Artesanal Completo + Suco',
-    price: 23.00,
+    price: 25.00,
     tag: 'Gourmet Noturno',
     isPopular: true,
     isVegetarian: false,
@@ -260,7 +260,7 @@ const MENU_DATA = [
     id: 'noi-pao-pate',
     category: 'cafe-noite',
     name: 'Combo Noite: Pão com Patê & Suco',
-    price: 20.00,
+    price: 25.00,
     tag: 'Prático & Gostoso',
     isPopular: false,
     isVegetarian: false,
@@ -429,7 +429,7 @@ const MENU_DATA = [
 const FLYERS_DATA = [
   { title: 'Almoço: Bife à Parmegiana & Saladas', file: 'assets/flyers/flyer-almoco-parmegiana.jpg' },
   { title: 'Almoço: Frango Assado & Farofa de Banana', file: 'assets/flyers/flyer-almoco-frango.jpg' },
-  { title: 'Almoço: Fricassê de Frango & Vegetariano (EJC)', file: 'assets/flyers/flyer-almoco-fricasse.jpg' },
+  { title: 'Almoço: Fricassê de Frango & Vegetariano (Campal)', file: 'assets/flyers/flyer-almoco-fricasse.jpg' },
   { title: 'Café da Noite: Hambúrguer, Bolos & Sucos', file: 'assets/flyers/flyer-cafe-noite-hamburguer.jpg' },
   { title: 'Café da Noite: Caldo de Mandioca & Pão com Patê', file: 'assets/flyers/flyer-cafe-noite-mandioca.jpg' },
   { title: 'Café da Noite: Caldo de Abóbora & Goiaba com Cacau', file: 'assets/flyers/flyer-cafe-noite-abobora.jpg' },
@@ -563,9 +563,9 @@ function renderDishesGrid() {
   if (!container) return;
 
   const categories = [
-    { id: 'almoco', title: '🍲 Almoço Completo', priceBadge: 'R$ 25,00 cada' },
-    { id: 'cafe-manha', title: '☀️ Café da Manhã', priceBadge: 'R$ 20,00 cada' },
-    { id: 'cafe-noite', title: '🌙 Café da Noite & Jantar', priceBadge: 'R$ 20,00 a R$ 23,00' },
+    { id: 'almoco', title: '🍲 Almoço Completo', priceBadge: 'R$ 33,00 cada' },
+    { id: 'cafe-manha', title: '☀️ Café da Manhã', priceBadge: 'R$ 25,00 cada' },
+    { id: 'cafe-noite', title: '🌙 Café da Noite & Jantar', priceBadge: 'R$ 25,00 cada' },
     { id: 'bolos', title: '🍰 Bolos Caseiros & Frutas', priceBadge: 'A partir de R$ 6,00' },
     { id: 'sucos', title: '🥤 Sucos Naturais & Especiais', priceBadge: 'A partir de R$ 7,00' }
   ];
@@ -943,7 +943,7 @@ function refreshPixQRCode() {
   const total = cart.reduce((acc, item) => acc + (item.unitPrice * item.quantity), 0);
   if (total <= 0) return;
 
-  const orderId = 'EJC' + Math.floor(1000 + Math.random() * 9000);
+  const orderId = 'CAMPAL' + Math.floor(1000 + Math.random() * 9000);
   
   // Gerar payload oficial BR Code
   currentPixPayload = PixBRCode.generate({
@@ -1033,6 +1033,7 @@ function finalizeAndSendWhatsApp() {
   const phoneInput = document.getElementById('customerPhone');
   const deliveryType = document.getElementById('deliveryType');
   const locationInput = document.getElementById('deliveryLocation');
+  const mealDateInput = document.getElementById('mealDate');
   const generalNotes = document.getElementById('generalOrderNotes');
 
   const name = nameInput ? nameInput.value.trim() : '';
@@ -1040,6 +1041,7 @@ function finalizeAndSendWhatsApp() {
   const location = locationInput ? locationInput.value.trim() : '';
   const notes = generalNotes ? generalNotes.value.trim() : '';
   const typeText = deliveryType ? deliveryType.options[deliveryType.selectedIndex].text : 'Retirada';
+  const mealDate = mealDateInput ? mealDateInput.options[mealDateInput.selectedIndex].text : 'Para Amanhã (Campal)';
 
   if (!name) {
     showToast('⚠️ Por favor, informe o seu Nome Completo.');
@@ -1052,18 +1054,19 @@ function finalizeAndSendWhatsApp() {
     return;
   }
 
-  const orderNumber = '#EJC-' + Math.floor(1000 + Math.random() * 9000);
+  const orderNumber = '#CAMPAL-' + Math.floor(1000 + Math.random() * 9000);
   const totalAmount = cart.reduce((acc, item) => acc + (item.unitPrice * item.quantity), 0);
   const totalFormatted = totalAmount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
   // Construção da mensagem formatada com Markdown WhatsApp
   let message = `🍽️ *NOVO PEDIDO: ${orderNumber}*\n`;
-  message += `*Cozinha da Chef Alessandra - EJC*\n`;
+  message += `*Cozinha da Chef Alessandra - Campal*\n`;
   message += `_Sabor, cuidado e carinho em cada refeição!_\n\n`;
 
   message += `👤 *DADOS DO CLIENTE*\n`;
   message += `• *Nome:* ${name}\n`;
   if (phone) message += `• *Contato:* ${phone}\n`;
+  message += `• *Dia da Refeição:* ${mealDate}\n`;
   message += `• *Modalidade:* ${typeText}\n`;
   if (location) message += `• *Local/Alojamento:* ${location}\n`;
   message += `\n`;

@@ -1,8 +1,8 @@
-# 🍽️ Cardápio Digital - Cozinha da Chef Alessandra (EJC)
+# 🍽️ Cardápio Digital - Cozinha da Chef Alessandra (Campal)
 
 > **"Sabor, cuidado e amor em cada refeição! Alimentando corpos, fortalecendo laços!"**
 
-Aplicação web moderna, acolhedora e 100% responsiva de **Cardápio Digital** desenvolvida para a **Chef Alessandra** e a **Equipe da Cozinha EJC**. 
+Aplicação web moderna, acolhedora e 100% responsiva de **Cardápio Digital** desenvolvida para a **Chef Alessandra** e a **Equipe da Cozinha Campal**. 
 
 ---
 
@@ -10,9 +10,9 @@ Aplicação web moderna, acolhedora e 100% responsiva de **Cardápio Digital** d
 
 - **📱 Mobile-First & Responsivo**: Projetado para ótima experiência em celulares e computadores.
 - **🥘 Catálogo Completo**:
-  - **Almoço Completo (R$ 25,00)**: Bife à Parmegiana, Frango Assado Douradinho da Casa, Fricassê de Frango e Fricassê Vegetariano.
-  - **Café da Manhã (R$ 20,00)**: Cuscuz Temperado, Pão com Ovos Mexidos, Batata Doce, Mini Sanduíches Naturais, Mingau de Milho, Frutas e Bolos.
-  - **Café da Noite / Jantar (R$ 20,00 a R$ 23,00)**: Caldo de Mandioca com Frango, Caldo de Abóbora com Frango, Hambúrguer Artesanal Completo e Combos de Pão com Patê.
+  - **Almoço Completo (R$ 33,00)**: Bife à Parmegiana, Frango Assado Douradinho da Casa, Fricassê de Frango e Fricassê Vegetariano.
+  - **Café da Manhã (R$ 25,00)**: Cuscuz Temperado, Pão com Ovos Mexidos, Batata Doce, Mini Sanduíches Naturais, Mingau de Milho, Frutas e Bolos.
+  - **Café da Noite / Jantar (R$ 25,00)**: Caldo de Mandioca com Frango, Caldo de Abóbora com Frango, Hambúrguer Artesanal Completo e Combos de Pão com Patê.
   - **Sobremesas & Bolos Caseiros**: Bolo de Chocolate Cremoso, Milho, Banana com Canela, Abacaxi Caramelizado, Coco Gelado e Melancia.
   - **Sucos Naturais & Especiais**: Suco de Goiaba com Cacau Baiano, Cajá, Acerola, Goiaba e Cupuaçu.
 - **🍴 Personalização de Marmitas / Pratos**: O cliente escolhe acompanhamentos e adiciona observações (ex: "sem cebola", "marmita caprichada").

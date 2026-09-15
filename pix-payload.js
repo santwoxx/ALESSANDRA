@@ -1,6 +1,6 @@
 /**
  * Módulo Oficial de Geração de Pix BR Code (Banco Central do Brasil / EMV)
- * Chave: 73988411342 (Alessandra - Equipe da Cozinha EJC)
+ * Chave: 73988411342 (Alessandra - Equipe da Cozinha Campal)
  */
 
 class PixBRCode {
@@ -25,7 +25,7 @@ class PixBRCode {
     return `${id}${len}${value}`;
   }
 
-  static generate({ key, name = 'ALESSANDRA', city = 'ILHEUS', amount = 0, txid = 'EJC' }) {
+  static generate({ key, name = 'ALESSANDRA', city = 'ILHEUS', amount = 0, txid = 'CAMPAL' }) {
     // 00: Payload Format Indicator
     let payload = this.formatField('00', '01');
 
@@ -58,7 +58,7 @@ class PixBRCode {
     payload += this.formatField('60', sanitizedCity);
 
     // 62: Additional Data Field Template (txid)
-    const cleanTxid = (txid || 'EJC').replace(/[^a-zA-Z0-9]/g, '').substring(0, 25) || 'EJC';
+    const cleanTxid = (txid || 'CAMPAL').replace(/[^a-zA-Z0-9]/g, '').substring(0, 25) || 'CAMPAL';
     const txidField = this.formatField('05', cleanTxid);
     payload += this.formatField('62', txidField);
 
@@ -76,7 +76,7 @@ window.CHEF_PIX_CONFIG = {
   city: 'ILHEUS',
   phoneFormatted: '(73) 98841-1342',
   whatsappRaw: '5573988411342',
-  team: 'Equipe da Cozinha - EJC'
+  team: 'Equipe da Cozinha - Campal'
 };
 
 window.PixBRCode = PixBRCode;
