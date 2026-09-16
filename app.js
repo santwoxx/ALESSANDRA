@@ -92,190 +92,6 @@ const MENU_DATA = [
     ]
   },
 
-  // --- CAFÉ DA MANHÃ ---
-  {
-    id: 'man-cuscuz',
-    category: 'cafe-manha',
-    name: 'Cuscuz Nordestino Temperado Especial',
-    price: 25.00,
-    tag: 'Energia & Tradição',
-    isPopular: true,
-    isVegetarian: true,
-    isMeal: true,
-    image: 'assets/dishes/cuscuz-temperado.jpg',
-    description: 'Cuscuz de milho flocão fofinho e úmido, temperado no capricho com ovos cozidos fatiados, ervilhas, tomate e cheiro verde.',
-    sidesSummary: 'Combo Completo com Suco natural + Melancia ou fatia de bolo caseiro.',
-    optionsGroupTitle: 'Escolha o Suco Natural do Combo:',
-    singleChoice: true,
-    options: [
-      { id: 'suco_caja', label: 'Suco de Cajá Natural', default: true },
-      { id: 'suco_acerola', label: 'Suco de Acerola Gelado', default: false },
-      { id: 'suco_cupuacu', label: 'Suco de Cupuaçu Cremoso', default: false },
-      { id: 'suco_goiaba', label: 'Suco de Goiaba Natural', default: false }
-    ],
-    extras: [
-      { id: 'com_melancia', label: 'Acompanhar fatia de melancia fresca', default: true },
-      { id: 'manteiga_extra', label: 'Manteiga derretida por cima', default: true }
-    ]
-  },
-  {
-    id: 'man-batata-doce',
-    category: 'cafe-manha',
-    name: 'Batata Doce Cozida Nutritiva',
-    price: 25.00,
-    tag: 'Saudável & Natural',
-    isPopular: false,
-    isVegetarian: true,
-    isMeal: true,
-    image: 'assets/dishes/batata-doce.jpg',
-    description: 'Batata doce macia e quentinha, fonte pura de energia saudável, acompanhada de pãozinho fresco, mingau ou fruta e suco.',
-    sidesSummary: 'Acompanha Suco natural gelado + Pão fresco ou fatia de bolo.',
-    optionsGroupTitle: 'Escolha o Suco do Combo:',
-    singleChoice: true,
-    options: [
-      { id: 'suco_caja', label: 'Suco de Cajá Natural', default: true },
-      { id: 'suco_acerola', label: 'Suco de Acerola', default: false },
-      { id: 'suco_cupuacu', label: 'Suco de Cupuaçu', default: false }
-    ]
-  },
-  {
-    id: 'man-pao-ovo',
-    category: 'cafe-manha',
-    name: 'Pão Francês com Ovos Mexidos',
-    price: 25.00,
-    tag: 'Clássico Aconchegante',
-    isPopular: false,
-    isVegetarian: true,
-    isMeal: true,
-    image: 'assets/dishes/pao-ovo.jpg',
-    description: 'Pão francês com casquinha crocante, recheado com ovos mexidos super cremosos preparados com cheiro verde e manteiga.',
-    sidesSummary: 'Acompanha 1 Suco natural + 1 Fatia de Melancia doce.',
-    optionsGroupTitle: 'Escolha o Suco:',
-    singleChoice: true,
-    options: [
-      { id: 'suco_caja', label: 'Suco de Cajá Natural', default: true },
-      { id: 'suco_acerola', label: 'Suco de Acerola', default: false },
-      { id: 'suco_goiaba', label: 'Suco de Goiaba', default: false }
-    ]
-  },
-  {
-    id: 'man-sanduiche-natural',
-    category: 'cafe-manha',
-    name: 'Mini Sanduíches Naturais da Manhã',
-    price: 25.00,
-    tag: 'Leve & Refrescante',
-    isPopular: false,
-    isVegetarian: false,
-    isMeal: true,
-    image: 'assets/dishes/sanduiche-natural.jpg',
-    description: 'Sanduíches naturais em pão integral especial com grãos, patê suave de frango, alface americana e rodelas de tomate.',
-    sidesSummary: 'Acompanha suco natural à sua escolha + fruta.',
-    optionsGroupTitle: 'Escolha o Suco Natural:',
-    singleChoice: true,
-    options: [
-      { id: 'suco_caja', label: 'Suco de Cajá', default: true },
-      { id: 'suco_acerola', label: 'Suco de Acerola', default: false },
-      { id: 'suco_goiaba', label: 'Suco de Goiaba', default: false }
-    ]
-  },
-  {
-    id: 'man-mingau',
-    category: 'cafe-manha',
-    name: 'Mingau Cremoso de Milho Verde',
-    price: 25.00,
-    tag: 'Quentinho & Aveludado',
-    isPopular: false,
-    isVegetarian: true,
-    isMeal: true,
-    image: 'assets/dishes/mingau-milho.jpg',
-    description: 'Mingau quentinho, espesso e aveludado, feito com milho fresco selecionado, leite integral e salpicado com canela em pó.',
-    sidesSummary: 'Acompanha fatia de bolo caseiro + suco natural.',
-    optionsGroupTitle: 'Escolha o Bolo:',
-    singleChoice: true,
-    options: [
-      { id: 'bolo_banana', label: 'Bolo de Banana com Canela', default: true },
-      { id: 'bolo_coco', label: 'Bolo Gelado de Coco', default: false },
-      { id: 'bolo_chocolate', label: 'Bolo de Chocolate Vulcão', default: false }
-    ]
-  },
-
-  // --- CAFÉ DA NOITE / JANTAR ---
-  {
-    id: 'noi-caldo-mandioca',
-    category: 'cafe-noite',
-    name: 'Caldo de Mandioca com Frango',
-    price: 25.00,
-    tag: 'Aquecer a Noite',
-    isPopular: true,
-    isVegetarian: false,
-    isMeal: true,
-    image: 'assets/dishes/caldo-mandioca.jpg',
-    description: 'Caldo cremoso, quentinho e reconfortante de mandioca cozida com bastante frango desfiado bem temperado e cebolinha.',
-    sidesSummary: 'Acompanha Pão com patê artesanal + Suco natural gelado.',
-    optionsGroupTitle: 'Acompanhamentos inclusos:',
-    options: [
-      { id: 'pao_pate', label: 'Pão francês fatiado com patê da Chef', default: true },
-      { id: 'torradas', label: 'Torradinhas crocantes', default: true },
-      { id: 'cheiro_verde', label: 'Cheiro verde fresco salpicado', default: true }
-    ]
-  },
-  {
-    id: 'noi-caldo-abobora',
-    category: 'cafe-noite',
-    name: 'Caldo Nutritivo de Abóbora com Frango',
-    price: 25.00,
-    tag: 'Sabor & Leveza',
-    isPopular: false,
-    isVegetarian: false,
-    isMeal: true,
-    image: 'assets/dishes/caldo-abobora.jpg',
-    description: 'Caldo especial de abóbora cabotiá cozida lentamente com frango desfiado, toques de azeite e ervas finas. Leve e nutritivo!',
-    sidesSummary: 'Acompanha pão com patê da casa + Suco natural.',
-    optionsGroupTitle: 'Acompanhamentos inclusos:',
-    options: [
-      { id: 'pao_pate', label: 'Pão francês com patê especial', default: true },
-      { id: 'cheiro_verde', label: 'Cebolinha e salsinha fresca', default: true }
-    ]
-  },
-  {
-    id: 'noi-hamburguer',
-    category: 'cafe-noite',
-    name: 'Hambúrguer Artesanal Completo + Suco',
-    price: 25.00,
-    tag: 'Gourmet Noturno',
-    isPopular: true,
-    isVegetarian: false,
-    isMeal: true,
-    image: 'assets/dishes/hamburguer.jpg',
-    description: 'Pão de gergelim dourado, hambúrguer caseiro suculento e alto, queijo derretido, tomate fatiado, alface e molho da casa.',
-    sidesSummary: 'Acompanha Suco natural gelado + Fatia de bolo à escolha.',
-    optionsGroupTitle: 'Personalização do Lanche:',
-    options: [
-      { id: 'com_queijo', label: 'Queijo derretido', default: true },
-      { id: 'com_salada', label: 'Alface e tomate fresco', default: true },
-      { id: 'com_molho', label: 'Molho especial da casa', default: true }
-    ]
-  },
-  {
-    id: 'noi-pao-pate',
-    category: 'cafe-noite',
-    name: 'Combo Noite: Pão com Patê & Suco',
-    price: 25.00,
-    tag: 'Prático & Gostoso',
-    isPopular: false,
-    isVegetarian: false,
-    isMeal: true,
-    image: 'assets/dishes/pao-pate.jpg',
-    description: 'Pãezinhos franceses fresquinhos servidos com pote generoso de patê caseiro especial de frango e ervas da Chef Alessandra.',
-    sidesSummary: 'Acompanha Suco natural + Fatia de bolo caseiro.',
-    optionsGroupTitle: 'Escolha a Bebida:',
-    singleChoice: true,
-    options: [
-      { id: 'suco_cacau', label: 'Suco de Goiaba com Cacau Baiano', default: true },
-      { id: 'suco_caja', label: 'Suco de Cajá Natural', default: false },
-      { id: 'suco_acerola', label: 'Suco de Acerola', default: false }
-    ]
-  },
 
   // --- BOLOS CASEIROS & SOBREMESAS ---
   {
@@ -429,13 +245,7 @@ const MENU_DATA = [
 const FLYERS_DATA = [
   { title: 'Almoço: Bife à Parmegiana & Saladas', file: 'assets/flyers/flyer-almoco-parmegiana.jpg' },
   { title: 'Almoço: Frango Assado & Farofa de Banana', file: 'assets/flyers/flyer-almoco-frango.jpg' },
-  { title: 'Almoço: Fricassê de Frango & Vegetariano (Campal)', file: 'assets/flyers/flyer-almoco-fricasse.jpg' },
-  { title: 'Café da Noite: Hambúrguer, Bolos & Sucos', file: 'assets/flyers/flyer-cafe-noite-hamburguer.jpg' },
-  { title: 'Café da Noite: Caldo de Mandioca & Pão com Patê', file: 'assets/flyers/flyer-cafe-noite-mandioca.jpg' },
-  { title: 'Café da Noite: Caldo de Abóbora & Goiaba com Cacau', file: 'assets/flyers/flyer-cafe-noite-abobora.jpg' },
-  { title: 'Café da Manhã: Cuscuz Temperado & Melancia', file: 'assets/flyers/flyer-cafe-manha-cuscuz.jpg' },
-  { title: 'Café da Manhã: Bolo de Banana & Sanduíches', file: 'assets/flyers/flyer-cafe-manha-banana.jpg' },
-  { title: 'Café da Manhã: Batata Doce & Mingau Cremoso', file: 'assets/flyers/flyer-cafe-manha-batata-doce.jpg' }
+  { title: 'Almoço: Fricassê de Frango & Vegetariano (Campal)', file: 'assets/flyers/flyer-almoco-fricasse.jpg' }
 ];
 
 // =============================================================================
@@ -459,7 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setupQuickFiltersAndSearch();
   setupCategoryNav();
   setupCartBar();
-  setupAudioPlayer();
   setupReceiptUpload();
   updateCartUI();
   updateFilterPillCounts();
@@ -564,8 +373,7 @@ function renderDishesGrid() {
 
   const categories = [
     { id: 'almoco', title: '🍲 Almoço Completo', priceBadge: 'R$ 33,00 cada' },
-    { id: 'cafe-manha', title: '☀️ Café da Manhã', priceBadge: 'R$ 25,00 cada' },
-    { id: 'cafe-noite', title: '🌙 Café da Noite & Jantar', priceBadge: 'R$ 25,00 cada' },
+
     { id: 'bolos', title: '🍰 Bolos Caseiros & Frutas', priceBadge: 'A partir de R$ 6,00' },
     { id: 'sucos', title: '🥤 Sucos Naturais & Especiais', priceBadge: 'A partir de R$ 7,00' }
   ];
@@ -1144,39 +952,6 @@ function closeFlyerFullscreenModal() {
   document.getElementById('flyerFullscreenModal').classList.remove('active');
 }
 
-// =============================================================================
-// 9. REPRODUTOR DE ÁUDIO DA CHEF
-// =============================================================================
-let audioInstance = null;
-let isAudioPlaying = false;
-
-function setupAudioPlayer() {
-  const playBtn = document.getElementById('btnPlayChefAudio');
-  if (!playBtn) return;
-
-  audioInstance = new Audio('assets/audio-alessandra.mp3');
-
-  audioInstance.addEventListener('ended', () => {
-    isAudioPlaying = false;
-    playBtn.innerHTML = '▶️';
-  });
-
-  playBtn.addEventListener('click', () => {
-    if (!isAudioPlaying) {
-      audioInstance.play().then(() => {
-        isAudioPlaying = true;
-        playBtn.innerHTML = '⏸️';
-        showToast('🔊 Ouvindo mensagem de áudio da Chef Alessandra...');
-      }).catch(err => {
-        console.log('Audio play catch:', err);
-      });
-    } else {
-      audioInstance.pause();
-      isAudioPlaying = false;
-      playBtn.innerHTML = '▶️';
-    }
-  });
-}
 
 // =============================================================================
 // 10. UTILITÁRIOS: TOAST NOTIFICATION
