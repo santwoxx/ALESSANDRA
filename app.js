@@ -1,267 +1,250 @@
 /**
  * CARDÁPIO DIGITAL - CHEF ALESSANDRA (EQUIPE DA COZINHA CAMPAL)
- * Lógica Completa da Aplicação: Catálogo, Filtros Rápidos, Busca, Modais, Carrinho, Pix e WhatsApp
+ * Refeições por Dia, Filtros, Carrinho, Pix e WhatsApp
+ *
+ * REGRA DE NEGÓCIO (definida pela Chef Alessandra e por Jéssica):
+ * - São 7 refeições no total, da quinta-feira à noite até o sábado à noite.
+ * - Cada refeição tem VALOR ÚNICO E FECHADO (não existe valor por item avulso).
+ *   Café da Manhã: R$ 25,00 | Almoço: R$ 33,00 | Café da Noite: R$ 25,00
+ * - Sucos, bolos e frutas JÁ ESTÃO INCLUSOS no valor da refeição.
+ * - O pedido é identificado por DIA + REFEIÇÃO, para a cozinha saber
+ *   exatamente quais refeições cada cliente reservou.
  */
 
 // =============================================================================
-// 1. CATÁLOGO COMPLETO DE PRATOS E REFEIÇÕES COM TAGS E FILTROS
+// 1. TABELA DE PREÇOS FIXOS POR TIPO DE REFEIÇÃO
 // =============================================================================
+const MEAL_PRICES = {
+  'cafe-manha': 25.00,
+  'almoco': 33.00,
+  'cafe-noite': 25.00
+};
+
+const MEAL_LABELS = {
+  'cafe-manha': { name: 'Café da Manhã', icon: '☀️' },
+  'almoco': { name: 'Almoço', icon: '🍲' },
+  'cafe-noite': { name: 'Café da Noite', icon: '🌙' }
+};
+
+const DAY_LABELS = {
+  'quinta': { name: 'Quinta-feira', short: 'Quinta' },
+  'sexta': { name: 'Sexta-feira', short: 'Sexta' },
+  'sabado': { name: 'Sábado', short: 'Sábado' }
+};
+
+const DAY_ORDER = ['quinta', 'sexta', 'sabado'];
+
+// =============================================================================
+// 2. GRUPOS DE ESCOLHA REUTILIZÁVEIS (TUDO INCLUSO NO VALOR DA REFEIÇÃO)
+// =============================================================================
+const CHOICE_ALMOCO_PRATO = {
+  id: 'prato_principal',
+  title: 'Escolha o Prato Principal (já incluso no valor)',
+  icon: '🍛',
+  singleChoice: true,
+  options: [
+    { id: 'parmegiana', label: 'Bife à Parmegiana Especial', default: true },
+    { id: 'frango_assado', label: 'Frango Assado Douradinho da Casa', default: false },
+    { id: 'fricasse_frango', label: 'Fricassê Cremoso de Frango', default: false },
+    { id: 'fricasse_veg', label: 'Fricassê Especial Vegetariano 🌱', default: false, isVegetarian: true }
+  ]
+};
+
+const CHOICE_ALMOCO_ACOMPANHA = {
+  id: 'acompanhamentos',
+  title: 'Acompanhamentos inclusos na marmita',
+  icon: '🍚',
+  singleChoice: false,
+  options: [
+    { id: 'arroz', label: 'Arroz branco soltinho', default: true },
+    { id: 'feijao', label: 'Feijão caseiro temperado', default: true },
+    { id: 'macarrao', label: 'Macarrão ao molho de tomate', default: true },
+    { id: 'salada_cozida', label: 'Salada cozida (cenoura, chuchu e vagem)', default: true },
+    { id: 'salada_crua', label: 'Salada crua (alface, tomate e cebola)', default: true },
+    { id: 'farofa', label: 'Farofa crocante de banana da terra', default: true }
+  ]
+};
+
+const CHOICE_MANHA_PRATO = {
+  id: 'prato_principal',
+  title: 'Escolha o Prato Principal (já incluso no valor)',
+  icon: '🍽️',
+  singleChoice: true,
+  options: [
+    { id: 'cuscuz', label: 'Cuscuz Nordestino Temperado com Ovos 🌱', default: true, isVegetarian: true },
+    { id: 'batata_doce', label: 'Batata Doce Cozida Nutritiva 🌱', default: false, isVegetarian: true },
+    { id: 'pao_ovo', label: 'Pão Francês com Ovos Mexidos Cremosos 🌱', default: false, isVegetarian: true },
+    { id: 'sanduiche', label: 'Mini Sanduíches Naturais com Patê', default: false },
+    { id: 'mingau', label: 'Mingau Cremoso de Milho Verde 🌱', default: false, isVegetarian: true }
+  ]
+};
+
+const CHOICE_NOITE_PRATO = {
+  id: 'prato_principal',
+  title: 'Escolha o Prato Principal (já incluso no valor)',
+  icon: '🍲',
+  singleChoice: true,
+  options: [
+    { id: 'caldo_mandioca', label: 'Caldo de Mandioca com Frango', default: true },
+    { id: 'caldo_abobora', label: 'Caldo Nutritivo de Abóbora com Frango', default: false },
+    { id: 'hamburguer', label: 'Hambúrguer Artesanal Completo', default: false },
+    { id: 'pao_pate', label: 'Pão Francês com Patê Caseiro da Chef', default: false }
+  ]
+};
+
+const CHOICE_SUCO = {
+  id: 'suco',
+  title: 'Escolha o Suco Natural (incluso, sem custo extra)',
+  icon: '🥤',
+  singleChoice: true,
+  options: [
+    { id: 'suco_goiaba_cacau', label: 'Suco de Goiaba com Cacau (Especial do Sul da Bahia)', default: true },
+    { id: 'suco_caja', label: 'Suco Natural de Cajá', default: false },
+    { id: 'suco_acerola', label: 'Suco Natural de Acerola', default: false },
+    { id: 'suco_goiaba', label: 'Suco Natural de Goiaba', default: false },
+    { id: 'suco_cupuacu', label: 'Suco Natural de Cupuaçu Cremoso', default: false }
+  ]
+};
+
+const CHOICE_SOBREMESA = {
+  id: 'sobremesa',
+  title: 'Escolha o Bolo ou a Fruta (incluso, sem custo extra)',
+  icon: '🍰',
+  singleChoice: true,
+  options: [
+    { id: 'bolo_chocolate', label: 'Bolo de Chocolate Cremoso', default: true },
+    { id: 'bolo_milho', label: 'Bolo de Milho Tradicional', default: false },
+    { id: 'bolo_banana', label: 'Bolo de Banana com Canela', default: false },
+    { id: 'bolo_abacaxi', label: 'Bolo de Abacaxi Caramelizado', default: false },
+    { id: 'bolo_coco', label: 'Bolo Gelado de Coco Cremoso', default: false },
+    { id: 'melancia', label: 'Porção de Melancia Doce em Fatias', default: false }
+  ]
+};
+
+// =============================================================================
+// 3. AS 7 REFEIÇÕES DA CAMPAL (QUINTA À NOITE ATÉ SÁBADO À NOITE)
+// =============================================================================
+function buildMeal(day, mealKey, config) {
+  const mealInfo = MEAL_LABELS[mealKey];
+  const dayInfo = DAY_LABELS[day];
+  return {
+    id: day + '-' + mealKey,
+    day: day,
+    dayName: dayInfo.name,
+    dayShort: dayInfo.short,
+    mealKey: mealKey,
+    mealName: mealInfo.name,
+    mealIcon: mealInfo.icon,
+    name: mealInfo.name + ' de ' + dayInfo.name,
+    price: MEAL_PRICES[mealKey],
+    order: config.order,
+    tag: config.tag,
+    isPopular: config.isPopular || false,
+    image: config.image,
+    description: config.description,
+    includedSummary: config.includedSummary,
+    choiceGroups: config.choiceGroups
+  };
+}
+
 const MENU_DATA = [
-  // --- ALMOÇO COMPLETO ---
-  {
-    id: 'alm-parmegiana',
-    category: 'almoco',
-    name: 'Bife à Parmegiana Especial',
-    price: 33.00,
+  // ---------- 1a REFEICAO: QUINTA-FEIRA A NOITE ----------
+  buildMeal('quinta', 'cafe-noite', {
+    order: 1,
+    tag: 'Abertura da Campal',
+    isPopular: true,
+    image: 'assets/dishes/caldo-mandioca.jpg',
+    description: 'A refeição que abre a nossa Campal! Caldo quentinho e reconfortante, pão fresquinho e suco natural para começar o encontro com o pé direito.',
+    includedSummary: 'Prato principal à sua escolha + pão com patê + suco natural + sobremesa. Tudo incluso no valor.',
+    choiceGroups: [CHOICE_NOITE_PRATO, CHOICE_SUCO, CHOICE_SOBREMESA]
+  }),
+
+  // ---------- 2a, 3a e 4a REFEICOES: SEXTA-FEIRA ----------
+  buildMeal('sexta', 'cafe-manha', {
+    order: 2,
+    tag: 'Energia para o Dia',
+    isPopular: true,
+    image: 'assets/dishes/cuscuz-temperado.jpg',
+    description: 'Café da manhã completo e caprichado para começar a sexta-feira com energia de sobra: prato principal quentinho, suco natural e bolo caseiro.',
+    includedSummary: 'Prato principal à sua escolha + suco natural + bolo ou fruta. Tudo incluso no valor.',
+    choiceGroups: [CHOICE_MANHA_PRATO, CHOICE_SUCO, CHOICE_SOBREMESA]
+  }),
+  buildMeal('sexta', 'almoco', {
+    order: 3,
     tag: 'Mais Pedido',
     isPopular: true,
-    isVegetarian: false,
-    isMeal: true,
     image: 'assets/dishes/bife-parmegiana.jpg',
-    description: 'Bife empanado crocante, coberto com molho de tomate artesanal especial da Chef e queijo mussarela gratinado irresistível.',
-    sidesSummary: 'Arroz soltinho, feijão temperado, macarrão ao molho, salada cozida e salada crua.',
-    optionsGroupTitle: 'Acompanhamentos inclusos na Marmita / Prato:',
-    options: [
-      { id: 'arroz', label: 'Arroz branco soltinho', default: true },
-      { id: 'feijao', label: 'Feijão fresquinho e caseiro', default: true },
-      { id: 'macarrao', label: 'Macarrão ao molho de tomate', default: true },
-      { id: 'salada_cozida', label: 'Salada cozida (cenoura, chuchu e vagem)', default: true },
-      { id: 'salada_crua', label: 'Salada crua refrescante (alface e tomate)', default: true }
-    ]
-  },
-  {
-    id: 'alm-frango-douradinho',
-    category: 'almoco',
-    name: 'Frango Assado Douradinho da Casa',
-    price: 33.00,
-    tag: 'Sabor Caseiro',
+    description: 'Almoço completo da Chef Alessandra: prato principal à sua escolha com todos os acompanhamentos, suco natural e sobremesa inclusos.',
+    includedSummary: 'Prato principal + arroz, feijão, macarrão, saladas e farofa + suco natural + sobremesa. Tudo incluso.',
+    choiceGroups: [CHOICE_ALMOCO_PRATO, CHOICE_ALMOCO_ACOMPANHA, CHOICE_SUCO, CHOICE_SOBREMESA]
+  }),
+  buildMeal('sexta', 'cafe-noite', {
+    order: 4,
+    tag: 'Aquecer a Noite',
+    isPopular: false,
+    image: 'assets/dishes/caldo-abobora.jpg',
+    description: 'Café da noite de sexta para encerrar o dia com aconchego: caldo cremoso ou lanche artesanal, acompanhado de suco natural gelado.',
+    includedSummary: 'Prato principal à sua escolha + pão com patê + suco natural + sobremesa. Tudo incluso no valor.',
+    choiceGroups: [CHOICE_NOITE_PRATO, CHOICE_SUCO, CHOICE_SOBREMESA]
+  }),
+
+  // ---------- 5a, 6a e 7a REFEICOES: SABADO ----------
+  buildMeal('sabado', 'cafe-manha', {
+    order: 5,
+    tag: 'Bom Dia Caprichado',
+    isPopular: false,
+    image: 'assets/dishes/pao-ovo.jpg',
+    description: 'Café da manhã de sábado servido com todo carinho: pratos quentinhos, sucos naturais da fruta e bolos caseiros feitos na hora.',
+    includedSummary: 'Prato principal à sua escolha + suco natural + bolo ou fruta. Tudo incluso no valor.',
+    choiceGroups: [CHOICE_MANHA_PRATO, CHOICE_SUCO, CHOICE_SOBREMESA]
+  }),
+  buildMeal('sabado', 'almoco', {
+    order: 6,
+    tag: 'Almoço Especial',
     isPopular: true,
-    isVegetarian: false,
-    isMeal: true,
     image: 'assets/dishes/frango-assado.jpg',
-    description: 'Frango assado douradinho e suculento, marinado em temperos naturais e assado na perfeição com muito carinho.',
-    sidesSummary: 'Arroz, feijão, batata grelhada com bechamel e mussarela, farofa de banana e salada crua.',
-    optionsGroupTitle: 'Acompanhamentos inclusos na Marmita / Prato:',
-    options: [
-      { id: 'arroz', label: 'Arroz branco soltinho', default: true },
-      { id: 'feijao', label: 'Feijão temperado na medida certa', default: true },
-      { id: 'batata_bechamel', label: 'Batata grelhada com bechamel e mussarela', default: true },
-      { id: 'farofa_banana', label: 'Farofa crocante de banana da terra', default: true },
-      { id: 'salada_crua', label: 'Salada crua (alface, tomate, cenoura e cebola)', default: true }
-    ]
-  },
-  {
-    id: 'alm-fricasse-frango',
-    category: 'almoco',
-    name: 'Fricassê Cremoso de Frango',
-    price: 33.00,
-    tag: 'Cremoso & Especial',
-    isPopular: true,
-    isVegetarian: false,
-    isMeal: true,
-    image: 'assets/dishes/fricasse-frango.jpg',
-    description: 'Fricassê aveludado de frango desfiado com milho verde fresco, ervilha, cenoura e temperos especiais, coberto com batata palha dourada.',
-    sidesSummary: 'Arroz branco, feijão caseiro, salada crua e salada cozida.',
-    optionsGroupTitle: 'Acompanhamentos inclusos na Marmita / Prato:',
-    options: [
-      { id: 'arroz', label: 'Arroz branco soltinho', default: true },
-      { id: 'feijao', label: 'Feijão caseiro com tempero especial', default: true },
-      { id: 'salada_cozida', label: 'Salada cozida nutritiva (batata, cenoura e vagem)', default: true },
-      { id: 'salada_crua', label: 'Salada crua fresca e colorida', default: true },
-      { id: 'batata_palha', label: 'Batata palha extra crocante por cima', default: true }
-    ]
-  },
-  {
-    id: 'alm-fricasse-vegetariano',
-    category: 'almoco',
-    name: 'Fricassê Especial Vegetariano',
-    price: 33.00,
-    tag: 'Opção Vegetariana',
+    description: 'O almoço mais aguardado do sábado! Prato principal à sua escolha com acompanhamentos fartos, suco natural e sobremesa inclusos.',
+    includedSummary: 'Prato principal + arroz, feijão, macarrão, saladas e farofa + suco natural + sobremesa. Tudo incluso.',
+    choiceGroups: [CHOICE_ALMOCO_PRATO, CHOICE_ALMOCO_ACOMPANHA, CHOICE_SUCO, CHOICE_SOBREMESA]
+  }),
+  buildMeal('sabado', 'cafe-noite', {
+    order: 7,
+    tag: 'Encerramento',
     isPopular: false,
-    isVegetarian: true,
-    isMeal: true,
-    image: 'assets/dishes/fricasse-vegetariano.jpg',
-    description: 'Fricassê cremoso e leve à base de proteína vegetal nobre, milho verde, ervilha, cenoura ralada e ervas aromáticas.',
-    sidesSummary: 'Arroz branco soltinho, feijão caseiro, salada crua e salada cozida.',
-    optionsGroupTitle: 'Acompanhamentos inclusos:',
-    options: [
-      { id: 'arroz', label: 'Arroz branco soltinho', default: true },
-      { id: 'feijao', label: 'Feijão caseiro selecionado', default: true },
-      { id: 'salada_cozida', label: 'Salada cozida nutritiva no ponto certo', default: true },
-      { id: 'salada_crua', label: 'Salada crua fresca', default: true }
-    ]
-  },
-
-
-  // --- BOLOS CASEIROS & SOBREMESAS ---
-  {
-    id: 'bolo-chocolate',
-    category: 'bolos',
-    name: 'Bolo de Chocolate Cremoso',
-    price: 8.00,
-    tag: 'Irresistível',
-    isPopular: true,
-    isVegetarian: true,
-    isMeal: false,
-    image: 'assets/dishes/bolo-chocolate.jpg',
-    description: 'Bolo fofinho de chocolate com cobertura abundante de brigadeiro cremoso e confeitos crocantes de chocolate.',
-    sidesSummary: 'Fatia generosa embalada com carinho.'
-  },
-  {
-    id: 'bolo-milho',
-    category: 'bolos',
-    name: 'Bolo de Milho Tradicional da Fazenda',
-    price: 7.00,
-    tag: 'Sabor de Infância',
-    isPopular: true,
-    isVegetarian: true,
-    isMeal: false,
-    image: 'assets/dishes/bolo-milho.jpg',
-    description: 'Bolo caseiro de milho com textura fofa e úmida, feito com milho de verdade e aquele sabor acolhedor de café da tarde.',
-    sidesSummary: 'Fatia generosa e quentinha.'
-  },
-  {
-    id: 'bolo-banana',
-    category: 'bolos',
-    name: 'Bolo de Banana com Canela',
-    price: 7.00,
-    tag: 'Aroma Delicioso',
-    isPopular: false,
-    isVegetarian: true,
-    isMeal: false,
-    image: 'assets/dishes/bolo-banana.jpg',
-    description: 'Massa macia com pedaços de banana caramelizada e toque perfumado de canela em pó. O sabor que abraça!',
-    sidesSummary: 'Fatia farta.'
-  },
-  {
-    id: 'bolo-abacaxi',
-    category: 'bolos',
-    name: 'Bolo de Abacaxi Caramelizado',
-    price: 8.00,
-    tag: 'Doce na Medida',
-    isPopular: false,
-    isVegetarian: true,
-    isMeal: false,
-    image: 'assets/dishes/bolo-abacaxi.jpg',
-    description: 'Bolo invertido úmido e fofinho com rodelas de abacaxi glaceadas na calda caramelizada dourada.',
-    sidesSummary: 'Fatia farta.'
-  },
-  {
-    id: 'bolo-coco',
-    category: 'bolos',
-    name: 'Bolo Gelado de Coco Cremoso',
-    price: 8.00,
-    tag: 'Fofinho & Úmido',
-    isPopular: false,
-    isVegetarian: true,
-    isMeal: false,
-    image: 'assets/dishes/bolo-coco.jpg',
-    description: 'Massa leve embebida em calda cremosa de coco e coberta com flocos de coco fresco ralado.',
-    sidesSummary: 'Embalado individualmente.'
-  },
-  {
-    id: 'sobremesa-melancia',
-    category: 'bolos',
-    name: 'Porção de Melancia Doce em Fatias',
-    price: 6.00,
-    tag: '100% Natural',
-    isPopular: false,
-    isVegetarian: true,
-    isMeal: false,
-    image: 'assets/dishes/melancia.jpg',
-    description: 'Fatias frescas, doces e super suculentas de melancia bem gelada para refrescar e hidratar o dia.',
-    sidesSummary: 'Porção com 3 fatias caprichadas.'
-  },
-
-  // --- SUCOS NATURAIS & ESPECIAIS ---
-  {
-    id: 'suco-goiaba-cacau',
-    category: 'sucos',
-    name: 'Suco Especial de Goiaba com Cacau',
-    price: 8.00,
-    tag: 'Especial Sul da Bahia',
-    isPopular: true,
-    isVegetarian: true,
-    isMeal: false,
-    image: 'assets/dishes/suco-goiaba-cacau.jpg',
-    description: 'Receita autêntica combinando polpa de goiaba fresca e o nobre cacau da nossa terra. Uma explosão de energia e sabor único!',
-    sidesSummary: 'Copo 400ml gelado.'
-  },
-  {
-    id: 'suco-caja',
-    category: 'sucos',
-    name: 'Suco Natural de Cajá',
-    price: 7.00,
-    tag: 'Refrescante & Cítrico',
-    isPopular: true,
-    isVegetarian: true,
-    isMeal: false,
-    image: 'assets/dishes/sucos-trio.jpg',
-    description: 'Suco feito com a pura polpa da fruta fresca, cítrico na medida certa e muito refrescante.',
-    sidesSummary: 'Copo 400ml bem gelado.'
-  },
-  {
-    id: 'suco-acerola',
-    category: 'sucos',
-    name: 'Suco Natural de Acerola',
-    price: 7.00,
-    tag: 'Vitamina C Pura',
-    isPopular: false,
-    isVegetarian: true,
-    isMeal: false,
-    image: 'assets/dishes/sucos-trio.jpg',
-    description: 'Suco rico em vitamina C natural, com sabor vivo da fruta batida na hora.',
-    sidesSummary: 'Copo 400ml gelado.'
-  },
-  {
-    id: 'suco-goiaba',
-    category: 'sucos',
-    name: 'Suco Natural de Goiaba',
-    price: 7.00,
-    tag: 'Aveludado & Doce',
-    isPopular: false,
-    isVegetarian: true,
-    isMeal: false,
-    image: 'assets/dishes/sucos-trio.jpg',
-    description: 'Polpa cremosa e aveludada de goiaba vermelha fresca. Saudável e suave.',
-    sidesSummary: 'Copo 400ml gelado.'
-  },
-  {
-    id: 'suco-cupuacu',
-    category: 'sucos',
-    name: 'Suco Natural de Cupuaçu Cremoso',
-    price: 8.00,
-    tag: 'Sabor Marcante',
-    isPopular: false,
-    isVegetarian: true,
-    isMeal: false,
-    image: 'assets/dishes/suco-misto.jpg',
-    description: 'Suco cremoso de cupuaçu com aroma inconfundível e sabor tropical único.',
-    sidesSummary: 'Copo 400ml gelado.'
-  }
+    image: 'assets/dishes/hamburguer.jpg',
+    description: 'A última refeição da nossa Campal, preparada com muito amor para fechar o encontro com chave de ouro e o coração cheio.',
+    includedSummary: 'Prato principal à sua escolha + pão com patê + suco natural + sobremesa. Tudo incluso no valor.',
+    choiceGroups: [CHOICE_NOITE_PRATO, CHOICE_SUCO, CHOICE_SOBREMESA]
+  })
 ];
 
 // Flyers Originais para Visualização
 const FLYERS_DATA = [
   { title: 'Almoço: Bife à Parmegiana & Saladas', file: 'assets/flyers/flyer-almoco-parmegiana.jpg' },
   { title: 'Almoço: Frango Assado & Farofa de Banana', file: 'assets/flyers/flyer-almoco-frango.jpg' },
-  { title: 'Almoço: Fricassê de Frango & Vegetariano (Campal)', file: 'assets/flyers/flyer-almoco-fricasse.jpg' }
+  { title: 'Almoço: Fricassê de Frango & Vegetariano', file: 'assets/flyers/flyer-almoco-fricasse.jpg' },
+  { title: 'Café da Manhã: Cuscuz Temperado', file: 'assets/flyers/flyer-cafe-manha-cuscuz.jpg' },
+  { title: 'Café da Manhã: Batata Doce Nutritiva', file: 'assets/flyers/flyer-cafe-manha-batata-doce.jpg' },
+  { title: 'Café da Manhã: Banana & Acompanhamentos', file: 'assets/flyers/flyer-cafe-manha-banana.jpg' },
+  { title: 'Café da Noite: Caldo de Mandioca', file: 'assets/flyers/flyer-cafe-noite-mandioca.jpg' },
+  { title: 'Café da Noite: Caldo de Abóbora', file: 'assets/flyers/flyer-cafe-noite-abobora.jpg' },
+  { title: 'Café da Noite: Hambúrguer Artesanal', file: 'assets/flyers/flyer-cafe-noite-hamburguer.jpg' }
 ];
 
 // =============================================================================
-// 2. ESTADO DO CARRINHO, FILTROS E SELEÇÃO ATUAL
+// 4. ESTADO DO CARRINHO, FILTROS E SELEÇÃO ATUAL
 // =============================================================================
 let cart = [];
 let currentDishCustomizing = null;
 let currentCustomQty = 1;
 let qrCodeInstance = null;
 
-// Estados de Filtros Rápidos
+// Estados de Filtros Rápidos ('all' | tipo de refeição | dia)
 let currentQuickFilter = 'all';
 let currentSearchQuery = '';
 
 // =============================================================================
-// 3. INICIALIZAÇÃO DA INTERFACE
+// 5. INICIALIZAÇÃO DA INTERFACE
 // =============================================================================
 document.addEventListener('DOMContentLoaded', () => {
   renderDishesGrid();
@@ -278,15 +261,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function updateFilterPillCounts() {
   const counts = {
     all: MENU_DATA.length,
-    popular: MENU_DATA.filter(d => d.isPopular).length,
-    vegetariano: MENU_DATA.filter(d => d.isVegetarian).length,
-    refeicoes: MENU_DATA.filter(d => d.isMeal).length,
-    sucos: MENU_DATA.filter(d => d.category === 'sucos').length,
-    sobremesas: MENU_DATA.filter(d => d.category === 'bolos').length
+    'cafe-manha': MENU_DATA.filter(m => m.mealKey === 'cafe-manha').length,
+    'almoco': MENU_DATA.filter(m => m.mealKey === 'almoco').length,
+    'cafe-noite': MENU_DATA.filter(m => m.mealKey === 'cafe-noite').length,
+    'quinta': MENU_DATA.filter(m => m.day === 'quinta').length,
+    'sexta': MENU_DATA.filter(m => m.day === 'sexta').length,
+    'sabado': MENU_DATA.filter(m => m.day === 'sabado').length
   };
 
-  const pillButtons = document.querySelectorAll('.filter-pill-btn');
-  pillButtons.forEach(btn => {
+  document.querySelectorAll('.filter-pill-btn').forEach(btn => {
     const filterType = btn.getAttribute('data-filter');
     if (counts[filterType] !== undefined) {
       let countBadge = btn.querySelector('.pill-count');
@@ -307,7 +290,6 @@ function setupQuickFiltersAndSearch() {
   const btnClearSearch = document.getElementById('btnClearSearch');
   const btnResetFilter = document.getElementById('btnResetFilter');
 
-  // Clique nos botões de filtro
   pillButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       pillButtons.forEach(b => b.classList.remove('active'));
@@ -317,7 +299,6 @@ function setupQuickFiltersAndSearch() {
     });
   });
 
-  // Digitação no campo de busca
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       currentSearchQuery = e.target.value.trim().toLowerCase();
@@ -328,7 +309,6 @@ function setupQuickFiltersAndSearch() {
     });
   }
 
-  // Limpar busca
   if (btnClearSearch) {
     btnClearSearch.addEventListener('click', () => {
       if (searchInput) {
@@ -341,169 +321,158 @@ function setupQuickFiltersAndSearch() {
     });
   }
 
-  // Limpar filtros e resetar para Todos
   if (btnResetFilter) {
     btnResetFilter.addEventListener('click', () => {
       currentQuickFilter = 'all';
       currentSearchQuery = '';
-      if (searchInput) {
-        searchInput.value = '';
-      }
-      if (btnClearSearch) {
-        btnClearSearch.style.display = 'none';
-      }
+      if (searchInput) searchInput.value = '';
+      if (btnClearSearch) btnClearSearch.style.display = 'none';
       pillButtons.forEach(b => {
-        if (b.getAttribute('data-filter') === 'all') {
-          b.classList.add('active');
-        } else {
-          b.classList.remove('active');
-        }
+        b.classList.toggle('active', b.getAttribute('data-filter') === 'all');
       });
       renderDishesGrid();
     });
   }
 }
 
-// Renderizar pratos com suporte a filtros e busca
+// Texto legível do filtro ativo
+function getActiveFilterLabel() {
+  if (MEAL_LABELS[currentQuickFilter]) {
+    return MEAL_LABELS[currentQuickFilter].icon + ' ' + MEAL_LABELS[currentQuickFilter].name;
+  }
+  if (DAY_LABELS[currentQuickFilter]) {
+    return '📅 ' + DAY_LABELS[currentQuickFilter].name;
+  }
+  return '';
+}
+
+// Verifica se uma refeição casa com o texto buscado (inclui itens inclusos)
+function mealMatchesSearch(meal, query) {
+  if (!query) return true;
+  const haystack = [
+    meal.name, meal.dayName, meal.mealName, meal.description,
+    meal.includedSummary, meal.tag
+  ];
+  meal.choiceGroups.forEach(group => {
+    haystack.push(group.title);
+    group.options.forEach(opt => haystack.push(opt.label));
+  });
+  return haystack.join(' ').toLowerCase().includes(query);
+}
+
+// Renderizar as refeições agrupadas por DIA, com suporte a filtros e busca
 function renderDishesGrid() {
   const container = document.getElementById('menuSectionsContainer');
   const filterNotice = document.getElementById('filterResultNotice');
   const filterText = document.getElementById('filterResultText');
   if (!container) return;
 
-  const categories = [
-    { id: 'almoco', title: '🍲 Almoço Completo', priceBadge: 'R$ 33,00 cada' },
-
-    { id: 'bolos', title: '🍰 Bolos Caseiros & Frutas', priceBadge: 'A partir de R$ 6,00' },
-    { id: 'sucos', title: '🥤 Sucos Naturais & Especiais', priceBadge: 'A partir de R$ 7,00' }
-  ];
-
-  // Filtrar itens
-  let filteredData = MENU_DATA.filter(dish => {
-    // 1. Filtro de tag
-    let passTag = true;
-    if (currentQuickFilter === 'popular') passTag = dish.isPopular === true;
-    else if (currentQuickFilter === 'vegetariano') passTag = dish.isVegetarian === true;
-    else if (currentQuickFilter === 'refeicoes') passTag = dish.isMeal === true;
-    else if (currentQuickFilter === 'sucos') passTag = dish.category === 'sucos';
-    else if (currentQuickFilter === 'sobremesas') passTag = dish.category === 'bolos';
-
-    if (!passTag) return false;
-
-    // 2. Filtro de busca textual
-    if (currentSearchQuery) {
-      const matchName = dish.name.toLowerCase().includes(currentSearchQuery);
-      const matchDesc = dish.description.toLowerCase().includes(currentSearchQuery);
-      const matchSides = dish.sidesSummary ? dish.sidesSummary.toLowerCase().includes(currentSearchQuery) : false;
-      const matchTag = dish.tag ? dish.tag.toLowerCase().includes(currentSearchQuery) : false;
-      return matchName || matchDesc || matchSides || matchTag;
+  const filteredData = MENU_DATA.filter(meal => {
+    let passFilter = true;
+    if (currentQuickFilter !== 'all') {
+      if (MEAL_LABELS[currentQuickFilter]) passFilter = meal.mealKey === currentQuickFilter;
+      else if (DAY_LABELS[currentQuickFilter]) passFilter = meal.day === currentQuickFilter;
     }
-
-    return true;
+    if (!passFilter) return false;
+    return mealMatchesSearch(meal, currentSearchQuery);
   });
 
-  // Atualizar aviso de filtro
   const isFiltering = currentQuickFilter !== 'all' || currentSearchQuery.length > 0;
   if (filterNotice && filterText) {
     if (isFiltering) {
       filterNotice.style.display = 'flex';
-      let label = '';
-      if (currentQuickFilter === 'popular') label = '⭐ Mais Pedidos';
-      else if (currentQuickFilter === 'vegetariano') label = '🌱 Vegetarianos';
-      else if (currentQuickFilter === 'refeicoes') label = '🍲 Refeições Completas';
-      else if (currentQuickFilter === 'sucos') label = '🥤 Sucos & Bebidas';
-      else if (currentQuickFilter === 'sobremesas') label = '🍰 Sobremesas & Bolos';
-
-      const searchPart = currentSearchQuery ? ` contendo "${currentSearchQuery}"` : '';
-      filterText.textContent = `Exibindo ${filteredData.length} item(ns) ${label ? 'em ' + label : ''}${searchPart}`;
+      const label = getActiveFilterLabel();
+      const searchPart = currentSearchQuery ? ' contendo "' + currentSearchQuery + '"' : '';
+      const plural = filteredData.length === 1 ? 'refeição' : 'refeições';
+      filterText.textContent = 'Exibindo ' + filteredData.length + ' ' + plural +
+        (label ? ' em ' + label : '') + searchPart;
     } else {
       filterNotice.style.display = 'none';
     }
   }
 
-  // Se nenhum resultado for encontrado
   if (filteredData.length === 0) {
-    container.innerHTML = `
-      <div class="filter-no-results">
-        <div class="filter-no-results-icon">🔍</div>
-        <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 8px;">Nenhum item encontrado</h3>
-        <p style="font-size: 0.95rem; margin-bottom: 18px;">Não encontramos nenhum prato com os filtros selecionados.</p>
-        <button type="button" class="btn-reset-filter" onclick="document.getElementById('btnResetFilter').click()" style="padding: 10px 24px; font-size: 0.9rem;">
-          Ver Cardápio Completo
-        </button>
-      </div>
-    `;
+    container.innerHTML =
+      '<div class="filter-no-results">' +
+        '<div class="filter-no-results-icon">🔍</div>' +
+        '<h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 8px;">Nenhuma refeição encontrada</h3>' +
+        '<p style="font-size: 0.95rem; margin-bottom: 18px;">Não encontramos nenhuma refeição com os filtros selecionados.</p>' +
+        '<button type="button" class="btn-reset-filter" onclick="document.getElementById(\'btnResetFilter\').click()" style="padding: 10px 24px; font-size: 0.9rem;">' +
+          'Ver Todas as 7 Refeições' +
+        '</button>' +
+      '</div>';
     return;
   }
 
-  // Se estiver filtrando, agrupar somente categorias que têm itens correspondentes
-  container.innerHTML = categories.map(cat => {
-    const dishesInCat = filteredData.filter(item => item.category === cat.id);
-    if (dishesInCat.length === 0) return '';
+  container.innerHTML = DAY_ORDER.map(dayKey => {
+    const mealsOfDay = filteredData.filter(m => m.day === dayKey).sort((a, b) => a.order - b.order);
+    if (mealsOfDay.length === 0) return '';
+    const dayInfo = DAY_LABELS[dayKey];
+    const plural = mealsOfDay.length === 1 ? 'refeição' : 'refeições';
 
-    return `
-      <section id="${cat.id}" class="category-section">
-        <div class="category-header-wrap">
-          <h2 class="category-title">${cat.title}</h2>
-          <span class="category-badge-price">${dishesInCat.length} ${dishesInCat.length === 1 ? 'opção' : 'opções'}</span>
-        </div>
-        <div class="dishes-grid">
-          ${dishesInCat.map(dish => renderDishCardHTML(dish)).join('')}
-        </div>
-      </section>
-    `;
+    return '' +
+      '<section id="' + dayKey + '" class="category-section">' +
+        '<div class="category-header-wrap">' +
+          '<h2 class="category-title">📅 ' + dayInfo.name + '</h2>' +
+          '<span class="category-badge-price">' + mealsOfDay.length + ' ' + plural + '</span>' +
+        '</div>' +
+        '<div class="dishes-grid">' +
+          mealsOfDay.map(meal => renderDishCardHTML(meal)).join('') +
+        '</div>' +
+      '</section>';
   }).join('');
 }
 
-function renderDishCardHTML(dish) {
-  const formattedPrice = dish.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-  const vegBadge = dish.isVegetarian ? '<span style="color: #22c55e; margin-left: 6px;" title="Opção Vegetariana">🌱</span>' : '';
-  const starBadge = dish.isPopular ? '<span style="color: #f59e0b; margin-left: 4px;" title="Destaque / Mais Pedido">⭐</span>' : '';
+function renderDishCardHTML(meal) {
+  const formattedPrice = meal.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const starBadge = meal.isPopular ? '<span style="color: #f59e0b; margin-left: 4px;" title="Destaque / Mais Pedido">⭐</span>' : '';
 
-  return `
-    <article class="dish-card" data-id="${dish.id}">
-      <div class="dish-card-media" onclick="openDishCustomizer('${dish.id}')" style="cursor: pointer;">
-        <img src="${dish.image}" alt="${dish.name}" class="dish-img" loading="lazy" />
-        <span class="dish-badge-tag">${dish.tag}</span>
-      </div>
-      <div class="dish-card-body">
-        <h3 class="dish-name" onclick="openDishCustomizer('${dish.id}')" style="cursor: pointer;">
-          ${dish.name} ${vegBadge} ${starBadge}
-        </h3>
-        <p class="dish-desc">${dish.description}</p>
-        ${dish.sidesSummary ? `<div class="dish-sides-preview"><strong>Acompanha:</strong> ${dish.sidesSummary}</div>` : ''}
-        <div class="dish-card-footer">
-          <div class="dish-price-wrap">
-            <span class="dish-price-prefix">Por apenas</span>
-            <span class="dish-price-value">${formattedPrice}</span>
-          </div>
-          <button class="btn-add-dish" onclick="openDishCustomizer('${dish.id}')" title="Adicionar e personalizar">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            Pedir
-          </button>
-        </div>
-      </div>
-    </article>
-  `;
+  return '' +
+    '<article class="dish-card" data-id="' + meal.id + '">' +
+      '<div class="dish-card-media" onclick="openDishCustomizer(\'' + meal.id + '\')" style="cursor: pointer;">' +
+        '<img src="' + meal.image + '" alt="' + meal.name + '" class="dish-img" loading="lazy" />' +
+        '<span class="dish-badge-tag">' + meal.tag + '</span>' +
+        '<span class="dish-badge-meal">' + meal.mealIcon + ' ' + meal.mealName + '</span>' +
+      '</div>' +
+      '<div class="dish-card-body">' +
+        '<span class="dish-day-label">' + meal.dayName + ' • Refeição ' + meal.order + ' de 7</span>' +
+        '<h3 class="dish-name" onclick="openDishCustomizer(\'' + meal.id + '\')" style="cursor: pointer;">' +
+          meal.name + ' ' + starBadge +
+        '</h3>' +
+        '<p class="dish-desc">' + meal.description + '</p>' +
+        '<div class="dish-sides-preview"><strong>Já incluso:</strong> ' + meal.includedSummary + '</div>' +
+        '<div class="dish-card-footer">' +
+          '<div class="dish-price-wrap">' +
+            '<span class="dish-price-prefix">Valor único da refeição</span>' +
+            '<span class="dish-price-value">' + formattedPrice + '</span>' +
+          '</div>' +
+          '<button class="btn-add-dish" onclick="openDishCustomizer(\'' + meal.id + '\')" title="Reservar esta refeição">' +
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+              '<line x1="12" y1="5" x2="12" y2="19"></line>' +
+              '<line x1="5" y1="12" x2="19" y2="12"></line>' +
+            '</svg>' +
+            'Reservar' +
+          '</button>' +
+        '</div>' +
+      '</div>' +
+    '</article>';
 }
 
-// Configurar navegação entre abas de categorias
+// Configurar navegação entre abas de dias
 function setupCategoryNav() {
   const tabs = document.querySelectorAll('.cat-tab-btn');
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
       const targetId = tab.getAttribute('data-target');
       if (targetId === 'flyers-modal') {
         openFlyersModal();
         return;
       }
-      
-      // Ao clicar em uma aba de categoria, se estiver com filtro de busca restrito, resetar para exibir a categoria
+
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      // Limpar filtros ativos para garantir que o dia alvo seja exibido
       if (currentQuickFilter !== 'all' || currentSearchQuery) {
         currentQuickFilter = 'all';
         currentSearchQuery = '';
@@ -518,58 +487,64 @@ function setupCategoryNav() {
       }
 
       const targetSection = document.getElementById(targetId);
-      if (targetSection) {
-        targetSection.scrollIntoView({ behavior: 'smooth' });
-      }
+      if (targetSection) targetSection.scrollIntoView({ behavior: 'smooth' });
     });
   });
 }
 
 // =============================================================================
-// 4. MODAL DE PERSONALIZAÇÃO DO PRATO
+// 6. MODAL DE RESERVA DA REFEIÇÃO (ESCOLHAS INCLUSAS NO VALOR)
 // =============================================================================
-function openDishCustomizer(dishId) {
-  const dish = MENU_DATA.find(d => d.id === dishId);
-  if (!dish) return;
+function openDishCustomizer(mealId) {
+  const meal = MENU_DATA.find(m => m.id === mealId);
+  if (!meal) return;
 
-  currentDishCustomizing = dish;
+  currentDishCustomizing = meal;
   currentCustomQty = 1;
 
-  document.getElementById('customModalDishTitle').textContent = dish.name;
-  document.getElementById('customModalDishImg').src = dish.image;
-  document.getElementById('customModalDishDesc').textContent = dish.description;
-  document.getElementById('customModalDishPrice').textContent = dish.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  document.getElementById('customModalDishTitle').textContent = meal.name;
+  document.getElementById('customModalDishImg').src = meal.image;
+  document.getElementById('customModalDishDesc').textContent = meal.description;
+  document.getElementById('customModalDishPrice').textContent =
+    meal.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   document.getElementById('customQtyDisplay').textContent = currentCustomQty;
   document.getElementById('dishNotesInput').value = '';
 
-  // Renderizar opções / acompanhamentos
+  // Renderizar TODOS os grupos de escolha (prato, suco, sobremesa, acompanhamentos)
   const optionsContainer = document.getElementById('customModalOptionsList');
-  if (dish.options && dish.options.length > 0) {
-    const isRadio = !!dish.singleChoice;
-    const inputType = isRadio ? 'radio' : 'checkbox';
-    const groupName = `opt_group_${dish.id}`;
+  const priceNote =
+    '<div class="meal-price-note">' +
+      '<strong>' + meal.mealIcon + ' ' + meal.name + '</strong> — valor único de ' +
+      meal.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + '. ' +
+      'Todos os itens abaixo já estão inclusos, sem cobrança adicional.' +
+    '</div>';
 
-    optionsContainer.innerHTML = `
-      <div class="custom-options-group">
-        <h4 class="modal-section-title">
-          <span>🍴</span> ${dish.optionsGroupTitle || 'Acompanhamentos / Opções:'}
-        </h4>
-        ${dish.options.map(opt => `
-          <label class="${inputType}-option-row">
-            <div class="option-left">
-              <input type="${inputType}" name="${groupName}" value="${opt.label}" ${opt.default ? 'checked' : ''} />
-              <span>${opt.label}</span>
-            </div>
-            <span style="font-size: 0.78rem; color: #326432; font-weight: 700;">Incluso</span>
-          </label>
-        `).join('')}
-      </div>
-    `;
-    optionsContainer.style.display = 'block';
-  } else {
-    optionsContainer.innerHTML = '';
-    optionsContainer.style.display = 'none';
-  }
+  optionsContainer.innerHTML = priceNote + meal.choiceGroups.map((group, groupIndex) => {
+    const isRadio = group.singleChoice === true;
+    const inputType = isRadio ? 'radio' : 'checkbox';
+    const groupName = 'opt_group_' + meal.id + '_' + group.id;
+    const hint = isRadio ? 'Escolha 1 opção' : 'Todos inclusos';
+
+    return '' +
+      '<div class="custom-options-group" data-group-id="' + group.id + '" data-group-title="' + group.title + '">' +
+        '<h4 class="modal-section-title">' +
+          '<span>' + group.icon + '</span> ' + group.title +
+          '<span class="group-hint">' + hint + '</span>' +
+        '</h4>' +
+        group.options.map(opt =>
+          '<label class="' + inputType + '-option-row">' +
+            '<div class="option-left">' +
+              '<input type="' + inputType + '" name="' + groupName + '" value="' + opt.label + '" ' +
+                (opt.default ? 'checked' : '') + ' />' +
+              '<span>' + opt.label + '</span>' +
+            '</div>' +
+            '<span style="font-size: 0.78rem; color: #326432; font-weight: 700;">Incluso</span>' +
+          '</label>'
+        ).join('') +
+      '</div>';
+  }).join('');
+
+  optionsContainer.style.display = 'block';
 
   updateCustomModalButtonPrice();
   document.getElementById('dishCustomModal').classList.add('active');
@@ -589,39 +564,51 @@ function changeCustomQty(delta) {
 function updateCustomModalButtonPrice() {
   if (!currentDishCustomizing) return;
   const total = currentDishCustomizing.price * currentCustomQty;
-  document.getElementById('btnConfirmAddDishText').textContent = 
-    `Adicionar ${currentCustomQty}x ao Pedido • ${total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+  const label = currentCustomQty === 1 ? 'Reservar 1 refeição' : 'Reservar ' + currentCustomQty + ' refeições';
+  document.getElementById('btnConfirmAddDishText').textContent =
+    label + ' • ' + total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
 function confirmAddDishToCart() {
   if (!currentDishCustomizing) return;
 
-  // Coletar opções marcadas
-  const selectedOptions = [];
-  const optionsInputs = document.querySelectorAll('#customModalOptionsList input:checked');
-  optionsInputs.forEach(input => selectedOptions.push(input.value));
+  // Coletar as escolhas agrupadas (para a cozinha ver exatamente o que preparar)
+  const selectedGroups = [];
+  document.querySelectorAll('#customModalOptionsList .custom-options-group').forEach(groupEl => {
+    const groupTitle = groupEl.getAttribute('data-group-title');
+    const checked = Array.from(groupEl.querySelectorAll('input:checked')).map(i => i.value);
+    if (checked.length > 0) {
+      selectedGroups.push({ title: groupTitle, values: checked });
+    }
+  });
 
   const notes = document.getElementById('dishNotesInput').value.trim();
 
   const cartItem = {
     cartId: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-    dishId: currentDishCustomizing.id,
+    mealId: currentDishCustomizing.id,
+    day: currentDishCustomizing.day,
+    dayName: currentDishCustomizing.dayName,
+    mealKey: currentDishCustomizing.mealKey,
+    mealName: currentDishCustomizing.mealName,
+    mealIcon: currentDishCustomizing.mealIcon,
+    order: currentDishCustomizing.order,
     name: currentDishCustomizing.name,
     image: currentDishCustomizing.image,
     unitPrice: currentDishCustomizing.price,
     quantity: currentCustomQty,
-    selectedOptions: selectedOptions,
+    selectedGroups: selectedGroups,
     notes: notes
   };
 
   cart.push(cartItem);
   updateCartUI();
   closeDishCustomModal();
-  showToast(`✅ "${cartItem.name}" adicionado ao pedido!`);
+  showToast('✅ "' + cartItem.name + '" reservado!');
 }
 
 // =============================================================================
-// 5. GERENCIAMENTO DO CARRINHO DE COMPRAS
+// 7. GERENCIAMENTO DAS REFEIÇÕES RESERVADAS (CARRINHO)
 // =============================================================================
 function setupCartBar() {
   const bar = document.getElementById('floatingCartBar');
@@ -661,6 +648,7 @@ function renderCartModalContent(totalPrice) {
   const cartTotalEl = document.getElementById('cartTotalAmount');
   const emptyState = document.getElementById('cartEmptyState');
   const checkoutSection = document.getElementById('checkoutFormSection');
+  const mealsCountEl = document.getElementById('cartMealsCount');
 
   if (!cartItemsList) return;
 
@@ -670,36 +658,33 @@ function renderCartModalContent(totalPrice) {
     if (checkoutSection) checkoutSection.style.display = 'none';
     if (cartSubtotalEl) cartSubtotalEl.textContent = 'R$ 0,00';
     if (cartTotalEl) cartTotalEl.textContent = 'R$ 0,00';
+    if (mealsCountEl) mealsCountEl.textContent = '0';
     return;
   }
 
   if (emptyState) emptyState.style.display = 'none';
   if (checkoutSection) checkoutSection.style.display = 'block';
 
-  cartItemsList.innerHTML = cart.map(item => {
-    const itemTotal = (item.unitPrice * item.quantity).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    return `
-      <div class="cart-item-card">
-        <img src="${item.image}" alt="${item.name}" class="cart-item-thumb" />
-        <div class="cart-item-details">
-          <h4 class="cart-item-name">${item.quantity}x ${item.name}</h4>
-          ${item.selectedOptions.length > 0 ? `<p class="cart-item-customizations">✓ ${item.selectedOptions.join(', ')}</p>` : ''}
-          ${item.notes ? `<p class="cart-item-customizations" style="color: #c47620; font-style: italic;">Obs: ${item.notes}</p>` : ''}
-          <span class="cart-item-price">${itemTotal}</span>
-        </div>
-        <div class="qty-stepper" style="transform: scale(0.85);">
-          <button class="btn-qty" onclick="changeItemCartQty('${item.cartId}', -1)">-</button>
-          <span class="qty-display">${item.quantity}</span>
-          <button class="btn-qty" onclick="changeItemCartQty('${item.cartId}', 1)">+</button>
-        </div>
-        <button class="btn-remove-cart-item" onclick="removeCartItem('${item.cartId}')" title="Excluir item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="3 6 5 6 21 6"></polyline>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          </svg>
-        </button>
-      </div>
-    `;
+  const totalMeals = cart.reduce((acc, item) => acc + item.quantity, 0);
+  if (mealsCountEl) mealsCountEl.textContent = totalMeals;
+
+  // Agrupar as refeições reservadas por DIA, para a cozinha distinguir os pedidos
+  cartItemsList.innerHTML = DAY_ORDER.map(dayKey => {
+    const itemsOfDay = cart.filter(i => i.day === dayKey).sort((a, b) => a.order - b.order);
+    if (itemsOfDay.length === 0) return '';
+
+    const dayTotal = itemsOfDay.reduce((acc, i) => acc + (i.unitPrice * i.quantity), 0);
+
+    return '' +
+      '<div class="cart-day-group">' +
+        '<div class="cart-day-header">' +
+          '<span>📅 ' + DAY_LABELS[dayKey].name + '</span>' +
+          '<span class="cart-day-total">' +
+            dayTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) +
+          '</span>' +
+        '</div>' +
+        itemsOfDay.map(item => renderCartItemHTML(item)).join('') +
+      '</div>';
   }).join('');
 
   const formattedTotal = totalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -707,6 +692,43 @@ function renderCartModalContent(totalPrice) {
   if (cartTotalEl) cartTotalEl.textContent = formattedTotal;
   const pixTotalEl = document.getElementById('pixTotalValueDisplay');
   if (pixTotalEl) pixTotalEl.textContent = formattedTotal;
+}
+
+function renderCartItemHTML(item) {
+  const itemTotal = (item.unitPrice * item.quantity)
+    .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+  const choicesHTML = (item.selectedGroups || []).map(group =>
+    '<p class="cart-item-customizations">' +
+      '<strong>' + group.title.replace(/\s*\(.*?\)\s*$/, '') + ':</strong> ' +
+      group.values.join(', ') +
+    '</p>'
+  ).join('');
+
+  return '' +
+    '<div class="cart-item-card">' +
+      '<img src="' + item.image + '" alt="' + item.name + '" class="cart-item-thumb" />' +
+      '<div class="cart-item-details">' +
+        '<h4 class="cart-item-name">' + item.quantity + 'x ' + item.mealIcon + ' ' + item.mealName + '</h4>' +
+        '<span class="cart-item-day">' + item.dayName + '</span>' +
+        choicesHTML +
+        (item.notes
+          ? '<p class="cart-item-customizations" style="color: #c47620; font-style: italic;">Obs: ' + item.notes + '</p>'
+          : '') +
+        '<span class="cart-item-price">' + itemTotal + '</span>' +
+      '</div>' +
+      '<div class="qty-stepper" style="transform: scale(0.85);">' +
+        '<button class="btn-qty" onclick="changeItemCartQty(\'' + item.cartId + '\', -1)">-</button>' +
+        '<span class="qty-display">' + item.quantity + '</span>' +
+        '<button class="btn-qty" onclick="changeItemCartQty(\'' + item.cartId + '\', 1)">+</button>' +
+      '</div>' +
+      '<button class="btn-remove-cart-item" onclick="removeCartItem(\'' + item.cartId + '\')" title="Remover refeição">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+          '<polyline points="3 6 5 6 21 6"></polyline>' +
+          '<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>' +
+        '</svg>' +
+      '</button>' +
+    '</div>';
 }
 
 function changeItemCartQty(cartId, delta) {
@@ -726,12 +748,12 @@ function removeCartItem(cartId) {
   cart = cart.filter(i => i.cartId !== cartId);
   updateCartUI();
   refreshPixQRCode();
-  showToast('Item removido do carrinho.');
+  showToast('Refeição removida do seu pedido.');
 }
 
 function openCartModal() {
   if (cart.length === 0) {
-    showToast('Adicione algum prato saboroso para começar!');
+    showToast('Reserve pelo menos uma refeição para começar!');
     return;
   }
   document.getElementById('cartModal').classList.add('active');
@@ -743,7 +765,7 @@ function closeCartModal() {
 }
 
 // =============================================================================
-// 6. GERAÇÃO DINÂMICA DO PIX (QR CODE & COPIA E COLA)
+// 8. GERAÇÃO DINÂMICA DO PIX (QR CODE & COPIA E COLA)
 // =============================================================================
 let currentPixPayload = '';
 
@@ -812,7 +834,7 @@ function copyPixPayloadCode() {
 }
 
 // =============================================================================
-// 7. ENVIO DO PEDIDO VIA WHATSAPP COM COMPROVANTE PRÉ-PREENCHIDO
+// 9. ENVIO DO PEDIDO VIA WHATSAPP COM COMPROVANTE PRÉ-PREENCHIDO
 // =============================================================================
 function setupReceiptUpload() {
   const fileInput = document.getElementById('receiptFileInput');
@@ -841,7 +863,6 @@ function finalizeAndSendWhatsApp() {
   const phoneInput = document.getElementById('customerPhone');
   const deliveryType = document.getElementById('deliveryType');
   const locationInput = document.getElementById('deliveryLocation');
-  const mealDateInput = document.getElementById('mealDate');
   const generalNotes = document.getElementById('generalOrderNotes');
 
   const name = nameInput ? nameInput.value.trim() : '';
@@ -849,7 +870,6 @@ function finalizeAndSendWhatsApp() {
   const location = locationInput ? locationInput.value.trim() : '';
   const notes = generalNotes ? generalNotes.value.trim() : '';
   const typeText = deliveryType ? deliveryType.options[deliveryType.selectedIndex].text : 'Retirada';
-  const mealDate = mealDateInput ? mealDateInput.options[mealDateInput.selectedIndex].text : 'Para Amanhã (Campal)';
 
   if (!name) {
     showToast('⚠️ Por favor, informe o seu Nome Completo.');
@@ -858,66 +878,79 @@ function finalizeAndSendWhatsApp() {
   }
 
   if (cart.length === 0) {
-    showToast('⚠️ Seu carrinho está vazio.');
+    showToast('⚠️ Você ainda não reservou nenhuma refeição.');
     return;
   }
 
   const orderNumber = '#CAMPAL-' + Math.floor(1000 + Math.random() * 9000);
   const totalAmount = cart.reduce((acc, item) => acc + (item.unitPrice * item.quantity), 0);
   const totalFormatted = totalAmount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const totalMeals = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Construção da mensagem formatada com Markdown WhatsApp
-  let message = `🍽️ *NOVO PEDIDO: ${orderNumber}*\n`;
-  message += `*Cozinha da Chef Alessandra - Campal*\n`;
-  message += `_Sabor, cuidado e carinho em cada refeição!_\n\n`;
+  let message = '🍽️ *NOVO PEDIDO: ' + orderNumber + '*\n';
+  message += '*Cozinha da Chef Alessandra - Campal*\n';
+  message += '_Sabor, cuidado e carinho em cada refeição!_\n\n';
 
-  message += `👤 *DADOS DO CLIENTE*\n`;
-  message += `• *Nome:* ${name}\n`;
-  if (phone) message += `• *Contato:* ${phone}\n`;
-  message += `• *Dia da Refeição:* ${mealDate}\n`;
-  message += `• *Modalidade:* ${typeText}\n`;
-  if (location) message += `• *Local/Alojamento:* ${location}\n`;
-  message += `\n`;
+  message += '👤 *DADOS DO CLIENTE*\n';
+  message += '• *Nome:* ' + name + '\n';
+  if (phone) message += '• *Contato:* ' + phone + '\n';
+  message += '• *Modalidade:* ' + typeText + '\n';
+  if (location) message += '• *Local/Alojamento:* ' + location + '\n';
+  message += '\n';
 
-  message += `🛒 *ITENS DO PEDIDO:*\n`;
-  cart.forEach(item => {
-    const itemTotal = (item.unitPrice * item.quantity).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    message += `▪️ *${item.quantity}x ${item.name}* (${itemTotal})\n`;
-    if (item.selectedOptions && item.selectedOptions.length > 0) {
-      message += `   └ Acompanhamentos: ${item.selectedOptions.join(', ')}\n`;
-    }
-    if (item.notes) {
-      message += `   └ Observação: ${item.notes}\n`;
-    }
+  // Refeições agrupadas por dia, para a cozinha saber exatamente o que preparar
+  message += '📋 *REFEIÇÕES RESERVADAS (' + totalMeals + ' no total):*\n';
+
+  DAY_ORDER.forEach(dayKey => {
+    const itemsOfDay = cart.filter(i => i.day === dayKey).sort((a, b) => a.order - b.order);
+    if (itemsOfDay.length === 0) return;
+
+    const dayTotal = itemsOfDay.reduce((acc, i) => acc + (i.unitPrice * i.quantity), 0);
+    message += '\n📅 *' + DAY_LABELS[dayKey].name.toUpperCase() + '*\n';
+
+    itemsOfDay.forEach(item => {
+      const itemTotal = (item.unitPrice * item.quantity)
+        .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      message += '▪️ *' + item.quantity + 'x ' + item.mealName + '* — ' + itemTotal + '\n';
+      (item.selectedGroups || []).forEach(group => {
+        const cleanTitle = group.title.replace(/\s*\(.*?\)\s*$/, '');
+        message += '   └ ' + cleanTitle + ': ' + group.values.join(', ') + '\n';
+      });
+      if (item.notes) {
+        message += '   └ ⚠️ Observação: ' + item.notes + '\n';
+      }
+    });
+
+    message += '   _Subtotal do dia: ' +
+      dayTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + '_\n';
   });
 
   if (notes) {
-    message += `\n📝 *OBSERVAÇÕES GERAIS:* ${notes}\n`;
+    message += '\n📝 *OBSERVAÇÕES GERAIS:* ' + notes + '\n';
   }
 
-  message += `\n💰 *VALOR TOTAL: ${totalFormatted}*\n`;
-  message += `💳 *PAGAMENTO:* Pix\n`;
-  message += `🔑 *Chave Pix Utilizada:* 73988411342 (Alessandra)\n\n`;
+  message += '\n💰 *VALOR TOTAL: ' + totalFormatted + '*\n';
+  message += '_(Café da Manhã R$ 25,00 • Almoço R$ 33,00 • Café da Noite R$ 25,00 — valores fechados, tudo incluso)_\n';
+  message += '💳 *PAGAMENTO:* Pix\n';
+  message += '🔑 *Chave Pix Utilizada:* 73988411342 (Alessandra)\n\n';
 
-  message += `🧾 *COMPROVANTE DO PIX:*\n`;
-  message += `_(Segue anexo o comprovante do pagamento Pix para confirmação da reserva! Pronto para preparar!)_\n\n`;
-  message += `Deus abençoe! 🙏❤️`;
+  message += '🧾 *COMPROVANTE DO PIX:*\n';
+  message += '_(Segue anexo o comprovante do pagamento Pix para confirmação da reserva!)_\n\n';
+  message += 'Deus abençoe! 🙏❤️';
 
-  // Copiar resumo do pedido para área de transferência por conveniência
   navigator.clipboard.writeText(message).catch(() => {});
 
-  // Redirecionamento oficial para o WhatsApp da Chef Alessandra
   const encodedText = encodeURIComponent(message);
-  const whatsappUrl = `https://wa.me/${window.CHEF_PIX_CONFIG.whatsappRaw}?text=${encodedText}`;
+  const whatsappUrl = 'https://wa.me/' + window.CHEF_PIX_CONFIG.whatsappRaw + '?text=' + encodedText;
 
-  showToast('🚀 Abrindo WhatsApp com seu pedido e comprovante...');
+  showToast('🚀 Abrindo WhatsApp com suas refeições reservadas...');
   setTimeout(() => {
     window.open(whatsappUrl, '_blank');
   }, 400);
 }
 
 // =============================================================================
-// 8. MODAL DE PANFLETOS ORIGINAIS (FLYERS)
+// 10. MODAL DE PANFLETOS ORIGINAIS (FLYERS)
 // =============================================================================
 function renderFlyersModalGrid() {
   const container = document.getElementById('flyersModalGrid');
@@ -954,7 +987,7 @@ function closeFlyerFullscreenModal() {
 
 
 // =============================================================================
-// 10. UTILITÁRIOS: TOAST NOTIFICATION
+// 11. UTILITÁRIOS: TOAST NOTIFICATION
 // =============================================================================
 let toastTimeout = null;
 function showToast(msg) {

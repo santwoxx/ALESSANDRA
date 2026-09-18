@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cardápio Digital | Cozinha da Chef Alessandra - Campal</title>
-  <meta name="description" content="Cardápio digital oficial da Chef Alessandra e Equipe da Cozinha Campal. Peça almoço completo, café da manhã ou café da noite com pagamento Pix e envio direto para o WhatsApp!" />
-  <meta name="keywords" content="cardápio digital, chef alessandra, campal, almoço, marmita, café da manhã, café da noite, pix" />
+  <meta name="description" content="Cardápio digital oficial da Chef Alessandra e Equipe da Cozinha Campal. Reserve as 7 refeições da Campal (quinta à noite até sábado à noite) com valor único por refeição, pagamento Pix e envio direto no WhatsApp!" />
+  <meta name="keywords" content="cardápio digital, chef alessandra, campal, 7 refeições, almoço, café da manhã, café da noite, pix, reserva de refeição" />
   <meta name="theme-color" content="#224722" />
 
   <!-- Open Graph / Redes Sociais -->
   <meta property="og:title" content="Cardápio Digital | Cozinha da Chef Alessandra" />
-  <meta property="og:description" content="Sabor, cuidado e amor em cada detalhe! Almoço R$ 33, Café da Manhã R$ 25 e Café da Noite R$ 25 com pagamento Pix e WhatsApp." />
+  <meta property="og:description" content="Sabor, cuidado e amor em cada detalhe! Reserve suas refeições da Campal: Almoço R$ 33, Café da Manhã R$ 25 e Café da Noite R$ 25 — tudo incluso, com Pix e WhatsApp." />
   <meta property="og:image" content="assets/alessandra.jpg" />
   <meta property="og:type" content="website" />
 
@@ -30,7 +30,7 @@
       <span class="pulse-dot"></span>
       Cozinha Aberta
     </div>
-    <span>Recebendo Pedidos para Amanhã e Dias da Campal • Chave Pix: <strong>73988411342</strong> (Alessandra)</span>
+    <span>Reservas abertas para as 7 refeições da Campal • Chave Pix: <strong>73988411342</strong> (Alessandra)</span>
   </aside>
 
   <!-- 2. Cabeçalho Principal com Perfil da Chef Alessandra -->
@@ -45,7 +45,7 @@
           <span class="org-tag">🌿 Equipe da Cozinha • Campal</span>
           <h1 class="site-title">Cozinha da Chef Alessandra</h1>
           <p class="site-subtitle">"Sabor, cuidado e amor em cada detalhe!"</p>
-          <p class="header-lead">Alimentando corpos, fortalecendo laços! Escolha seu prato, pague com praticidade pelo Pix e receba a confirmação do seu pedido direto no WhatsApp.</p>
+          <p class="header-lead">Alimentando corpos, fortalecendo laços! Escolha as refeições que você vai fazer em cada dia, pague com praticidade pelo Pix e receba a confirmação do seu pedido direto no WhatsApp.</p>
         </div>
       </div>
 
@@ -66,9 +66,16 @@
     </div>
   </header>
 
-  <!-- 3. Faixa Rápida de Preços das Refeições -->
-  <section class="pricing-strip" aria-label="Tabela de Preços">
+  <!-- 3. Faixa Rápida de Preços Fixos das Refeições -->
+  <section class="pricing-strip" aria-label="Tabela de Preços das Refeições">
     <div class="pricing-strip-container">
+      <div class="price-pill-highlight">
+        <span class="price-pill-icon">☀️</span>
+        <div>
+          <div class="price-pill-label">Café da Manhã</div>
+          <div class="price-pill-value">R$ 25,00</div>
+        </div>
+      </div>
       <div class="price-pill-highlight">
         <span class="price-pill-icon">🍲</span>
         <div>
@@ -76,36 +83,30 @@
           <div class="price-pill-value">R$ 33,00</div>
         </div>
       </div>
-
       <div class="price-pill-highlight">
-        <span class="price-pill-icon">🍰</span>
+        <span class="price-pill-icon">🌙</span>
         <div>
-          <div class="price-pill-label">Bolos Caseiros</div>
-          <div class="price-pill-value">A partir de R$ 6,00</div>
-        </div>
-      </div>
-      <div class="price-pill-highlight">
-        <span class="price-pill-icon">🥤</span>
-        <div>
-          <div class="price-pill-label">Sucos Naturais</div>
-          <div class="price-pill-value">A partir de R$ 7,00</div>
+          <div class="price-pill-label">Café da Noite</div>
+          <div class="price-pill-value">R$ 25,00</div>
         </div>
       </div>
     </div>
+    <p class="pricing-strip-note">
+      ✅ Valor único por refeição — <strong>suco, bolo e sobremesa já estão inclusos</strong>. Não há cobrança de itens avulsos.
+    </p>
   </section>
 
-  <!-- 4. Barra Fixa de Abas de Categorias -->
+  <!-- 4. Barra Fixa de Abas por Dia -->
   <nav class="category-nav-wrapper" id="categoryNav">
     <div class="category-nav-container">
-      <button class="cat-tab-btn active" data-target="almoco" id="tabAlmoco">
-        <span class="cat-icon">🍲</span> Almoço (R$ 33)
+      <button class="cat-tab-btn active" data-target="quinta" id="tabQuinta">
+        <span class="cat-icon">📅</span> Quinta-feira
       </button>
-
-      <button class="cat-tab-btn" data-target="bolos" id="tabBolos">
-        <span class="cat-icon">🍰</span> Bolos & Sobremesas
+      <button class="cat-tab-btn" data-target="sexta" id="tabSexta">
+        <span class="cat-icon">📅</span> Sexta-feira
       </button>
-      <button class="cat-tab-btn" data-target="sucos" id="tabSucos">
-        <span class="cat-icon">🥤</span> Sucos Naturais
+      <button class="cat-tab-btn" data-target="sabado" id="tabSabado">
+        <span class="cat-icon">📅</span> Sábado
       </button>
       <button class="cat-tab-btn cat-tab-special" data-target="flyers-modal" id="tabFlyers">
         <span class="cat-icon">📜</span> Ver Panfletos Oficiais
@@ -117,38 +118,60 @@
   <main class="main-container">
 
 
+    <!-- Aviso das 7 Refeições -->
+    <section class="meals-overview-box">
+      <h2 class="meals-overview-title">🍽️ São 7 refeições, da quinta-feira à noite ao sábado à noite</h2>
+      <p class="meals-overview-text">
+        Reserve exatamente as refeições que você vai fazer. Cada refeição tem
+        <strong>valor único e fechado</strong>, com suco natural, bolo e acompanhamentos
+        <strong>já inclusos</strong> — não existe cobrança de itens avulsos.
+      </p>
+      <div class="meals-overview-list">
+        <span class="meal-chip">1 · Quinta 🌙 Café da Noite</span>
+        <span class="meal-chip">2 · Sexta ☀️ Café da Manhã</span>
+        <span class="meal-chip">3 · Sexta 🍲 Almoço</span>
+        <span class="meal-chip">4 · Sexta 🌙 Café da Noite</span>
+        <span class="meal-chip">5 · Sábado ☀️ Café da Manhã</span>
+        <span class="meal-chip">6 · Sábado 🍲 Almoço</span>
+        <span class="meal-chip">7 · Sábado 🌙 Café da Noite</span>
+      </div>
+    </section>
+
     <!-- Barra de Busca Rápida & Filtros em Destaque no Topo -->
-    <section class="filter-search-section" aria-label="Filtros e Busca de Pratos">
+    <section class="filter-search-section" aria-label="Filtros e Busca de Refeições">
       <div class="search-input-wrapper">
         <span class="search-icon">🔍</span>
-        <input type="text" id="menuSearchInput" class="menu-search-input" placeholder="Buscar por prato, caldo, bolo, suco, acompanhamento..." aria-label="Buscar no cardápio" />
+        <input type="text" id="menuSearchInput" class="menu-search-input" placeholder="Buscar por dia, refeição, prato, suco ou bolo..." aria-label="Buscar no cardápio" />
         <button type="button" id="btnClearSearch" class="btn-clear-search" title="Limpar busca" style="display: none;">✕</button>
       </div>
 
       <div class="quick-tags-container" id="quickFilterTags">
         <button type="button" class="filter-pill-btn active" data-filter="all">
-          <span>🍽️</span> Todos
+          <span>🍽️</span> Todas
         </button>
-        <button type="button" class="filter-pill-btn" data-filter="popular">
-          <span>⭐</span> Mais Pedidos
+        <button type="button" class="filter-pill-btn" data-filter="cafe-manha">
+          <span>☀️</span> Café da Manhã
         </button>
-        <button type="button" class="filter-pill-btn" data-filter="vegetariano">
-          <span>🌱</span> Vegetariano
+        <button type="button" class="filter-pill-btn" data-filter="almoco">
+          <span>🍲</span> Almoço
         </button>
-        <button type="button" class="filter-pill-btn" data-filter="refeicoes">
-          <span>🍲</span> Refeições Completas
+        <button type="button" class="filter-pill-btn" data-filter="cafe-noite">
+          <span>🌙</span> Café da Noite
         </button>
-        <button type="button" class="filter-pill-btn" data-filter="sucos">
-          <span>🥤</span> Sucos & Bebidas
+        <button type="button" class="filter-pill-btn" data-filter="quinta">
+          <span>📅</span> Quinta
         </button>
-        <button type="button" class="filter-pill-btn" data-filter="sobremesas">
-          <span>🍰</span> Sobremesas & Bolos
+        <button type="button" class="filter-pill-btn" data-filter="sexta">
+          <span>📅</span> Sexta
+        </button>
+        <button type="button" class="filter-pill-btn" data-filter="sabado">
+          <span>📅</span> Sábado
         </button>
       </div>
 
       <!-- Aviso Dinâmico de Filtro Ativo -->
       <div id="filterResultNotice" class="filter-result-notice" style="display: none;">
-        <span id="filterResultText">Exibindo itens</span>
+        <span id="filterResultText">Exibindo refeições</span>
         <button type="button" id="btnResetFilter" class="btn-reset-filter">✕ Limpar Filtro</button>
       </div>
     </section>
@@ -164,7 +187,9 @@
       <div class="footer-logo">Cozinha da Chef Alessandra</div>
       <p class="footer-quote">"Alimentando corpos, fortalecendo laços! Feito com amor para você!"</p>
       <div class="footer-links">
-        <a href="#almoco">Almoço</a>
+        <a href="#quinta">Quinta</a>
+        <a href="#sexta">Sexta</a>
+        <a href="#sabado">Sábado</a>
 
         <a href="javascript:void(0)" onclick="openFlyersModal()">Panfletos Oficiais</a>
         <a href="https://wa.me/5573988411342" target="_blank">Falar no WhatsApp</a>
@@ -181,7 +206,7 @@
     <div class="cart-bar-left">
       <div class="cart-badge-counter" id="cartBarCount">0</div>
       <div class="cart-bar-text">
-        <span class="cart-bar-label">Seu Pedido</span>
+        <span class="cart-bar-label">Refeições Reservadas</span>
         <span class="cart-bar-total" id="cartBarTotal">R$ 0,00</span>
       </div>
     </div>
@@ -197,7 +222,7 @@
   <div class="modal-backdrop" id="dishCustomModal" aria-hidden="true">
     <div class="modal-sheet">
       <div class="modal-header">
-        <h3 class="modal-title" id="customModalDishTitle">Personalizar Prato</h3>
+        <h3 class="modal-title" id="customModalDishTitle">Reservar Refeição</h3>
         <button class="btn-close-modal" onclick="closeDishCustomModal()" aria-label="Fechar modal">✕</button>
       </div>
       <div class="modal-body-scroll">
@@ -211,13 +236,13 @@
 
         <!-- Campo de Observações do Item -->
         <div class="form-field-wrap">
-          <label class="form-label" for="dishNotesInput">Observações para a Cozinha (Opcional):</label>
+          <label class="form-label" for="dishNotesInput">Observações para a Cozinha (alergias, restrições, etc.):</label>
           <textarea id="dishNotesInput" class="form-control" placeholder="Ex: Sem cebola, caprichar na farofa de banana, marmita bem quentinha..."></textarea>
         </div>
 
         <!-- Seletor de Quantidade -->
         <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 12px;">
-          <span style="font-weight: 700; color: var(--primary-dark);">Quantidade:</span>
+          <span style="font-weight: 700; color: var(--primary-dark);">Quantas pessoas?</span>
           <div class="qty-stepper">
             <button class="btn-qty" onclick="changeCustomQty(-1)" aria-label="Diminuir quantidade">-</button>
             <span class="qty-display" id="customQtyDisplay">1</span>
@@ -227,11 +252,11 @@
       </div>
       <div class="modal-footer-sticky">
         <div style="display: flex; flex-direction: column;">
-          <span style="font-size: 0.75rem; color: var(--text-light); text-transform: uppercase;">Valor:</span>
+          <span style="font-size: 0.75rem; color: var(--text-light); text-transform: uppercase;">Valor único:</span>
           <span id="customModalDishPrice" style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">R$ 0,00</span>
         </div>
         <button class="btn-add-dish" onclick="confirmAddDishToCart()" id="btnConfirmAddDish" style="padding: 12px 24px; font-size: 0.95rem;">
-          <span id="btnConfirmAddDishText">Adicionar ao Pedido</span>
+          <span id="btnConfirmAddDishText">Reservar Refeição</span>
         </button>
       </div>
     </div>
@@ -241,7 +266,7 @@
   <div class="modal-backdrop" id="cartModal" aria-hidden="true">
     <div class="modal-sheet" style="max-width: 620px;">
       <div class="modal-header">
-        <h3 class="modal-title">Seu Pedido • Cozinha Campal</h3>
+        <h3 class="modal-title">Suas Refeições • Cozinha Campal</h3>
         <button class="btn-close-modal" onclick="closeCartModal()" aria-label="Fechar carrinho">✕</button>
       </div>
       <div class="modal-body-scroll">
@@ -249,8 +274,8 @@
         <!-- Itens do Carrinho -->
         <div id="cartEmptyState" class="cart-empty-state" style="display: none;">
           <div class="cart-empty-icon">🍲</div>
-          <h4>Seu carrinho está vazio</h4>
-          <p style="font-size: 0.88rem; margin-top: 6px;">Escolha um prato do cardápio para começar.</p>
+          <h4>Você ainda não reservou nenhuma refeição</h4>
+          <p style="font-size: 0.88rem; margin-top: 6px;">Escolha as refeições de cada dia para começar.</p>
         </div>
 
         <div id="cartItemsList" class="cart-items-list"></div>
@@ -261,7 +286,7 @@
           <!-- Subtotal / Total -->
           <div style="background: var(--bg-surface-alt); padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 24px; border: 1px solid var(--border-light);">
             <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; color: var(--text-muted);">
-              <span>Subtotal dos Itens:</span>
+              <span>Refeições reservadas: <strong id="cartMealsCount">0</strong></span>
               <span id="cartSubtotalAmount">R$ 0,00</span>
             </div>
             <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 800; color: var(--primary); border-top: 1px dashed var(--border-light); padding-top: 8px;">
@@ -292,16 +317,6 @@
                 <option value="entrega">Entrega em Endereço</option>
               </select>
             </div>
-          </div>
-
-          <!-- Seleção do Dia da Refeição (Hoje / Amanhã / Campal) -->
-          <div class="form-field-wrap">
-            <label class="form-label" for="mealDate">📅 Para quando é o seu pedido? *</label>
-            <select id="mealDate" class="form-control" style="font-weight: 600; color: var(--primary-dark);">
-              <option value="amanha" selected>Para Amanhã (Campal)</option>
-              <option value="hoje">Para Hoje</option>
-              <option value="outro">Outro Dia / Programação da Campal</option>
-            </select>
           </div>
 
           <div class="form-field-wrap">

@@ -9,22 +9,32 @@ Aplicação web moderna, acolhedora e 100% responsiva de **Cardápio Digital** d
 ## ✨ Funcionalidades
 
 - **📱 Mobile-First & Responsivo**: Projetado para ótima experiência em celulares e computadores.
-- **🥘 Catálogo Completo**:
-  - **Almoço Completo (R$ 33,00)**: Bife à Parmegiana, Frango Assado Douradinho da Casa, Fricassê de Frango e Fricassê Vegetariano.
-  - **Café da Manhã (R$ 25,00)**: Cuscuz Temperado, Pão com Ovos Mexidos, Batata Doce, Mini Sanduíches Naturais, Mingau de Milho, Frutas e Bolos.
-  - **Café da Noite / Jantar (R$ 25,00)**: Caldo de Mandioca com Frango, Caldo de Abóbora com Frango, Hambúrguer Artesanal Completo e Combos de Pão com Patê.
-  - **Sobremesas & Bolos Caseiros**: Bolo de Chocolate Cremoso, Milho, Banana com Canela, Abacaxi Caramelizado, Coco Gelado e Melancia.
-  - **Sucos Naturais & Especiais**: Suco de Goiaba com Cacau Baiano, Cajá, Acerola, Goiaba e Cupuaçu.
-- **🍴 Personalização de Marmitas / Pratos**: O cliente escolhe acompanhamentos e adiciona observações (ex: "sem cebola", "marmita caprichada").
-- **🛒 Carrinho Interativo**: Totalizador dinâmico com barra fixa flutuante.
+- **🗓️ As 7 Refeições da Campal**: O cardápio é organizado por **dia + refeição**, da quinta-feira à noite até o sábado à noite, para a cozinha saber exatamente o que cada cliente reservou:
+
+  | # | Dia | Refeição | Valor |
+  |---|-----|----------|-------|
+  | 1 | Quinta-feira | 🌙 Café da Noite | R$ 25,00 |
+  | 2 | Sexta-feira | ☀️ Café da Manhã | R$ 25,00 |
+  | 3 | Sexta-feira | 🍲 Almoço | R$ 33,00 |
+  | 4 | Sexta-feira | 🌙 Café da Noite | R$ 25,00 |
+  | 5 | Sábado | ☀️ Café da Manhã | R$ 25,00 |
+  | 6 | Sábado | 🍲 Almoço | R$ 33,00 |
+  | 7 | Sábado | 🌙 Café da Noite | R$ 25,00 |
+
+- **💰 Valor Único e Fechado por Refeição**: Não existe preço de item avulso. Suco natural, bolo, fruta e acompanhamentos **já estão inclusos** no valor da refeição.
+- **🍴 Escolhas Inclusas**: Dentro de cada refeição o cliente escolhe, sem custo extra:
+  - **Almoço**: prato principal (Bife à Parmegiana, Frango Assado, Fricassê de Frango ou Fricassê Vegetariano), acompanhamentos, suco e sobremesa.
+  - **Café da Manhã**: prato principal (Cuscuz Temperado, Batata Doce, Pão com Ovos, Mini Sanduíches ou Mingau de Milho), suco e bolo/fruta.
+  - **Café da Noite**: prato principal (Caldo de Mandioca, Caldo de Abóbora, Hambúrguer Artesanal ou Pão com Patê), suco e sobremesa.
+- **🔍 Filtros e Busca**: Filtre por tipo de refeição (Café da Manhã / Almoço / Café da Noite) ou por dia (Quinta / Sexta / Sábado), com busca em tempo real.
+- **🛒 Carrinho Agrupado por Dia**: As refeições reservadas aparecem separadas por dia, com subtotal de cada dia.
 - **⚡ Pagamento Rápido via Pix**:
   - **Chave Pix**: `73988411342` (Alessandra)
   - **QR Code Dinâmico** gerado localmente com o valor exato do pedido (padrão oficial BR Code / EMV do Banco Central).
   - Botão de **Copiar Chave Pix** e **Copiar Código Pix Copia e Cola**.
   - Opção de anexar prévia do comprovante.
 - **💬 Envio Automático para o WhatsApp da Chef Alessandra**:
-  - Botão de finalização que gera a mensagem pré-formatada com resumo, itens, observações, dados de entrega e comprovante Pix, abrindo diretamente o WhatsApp (`(73) 98841-1342`).
-- **🎙️ Mensagem de Áudio da Chef**: Reprodutor integrado na página com a voz da Chef Alessandra.
+  - Mensagem pré-formatada listando as refeições **agrupadas por dia**, com as escolhas de cada uma, subtotal por dia, observações e dados de entrega, abrindo direto o WhatsApp (`(73) 98841-1342`).
 - **📜 Galeria de Panfletos Oficiais**: Visualização em tela cheia dos panfletos originais do cardápio.
 
 ---
